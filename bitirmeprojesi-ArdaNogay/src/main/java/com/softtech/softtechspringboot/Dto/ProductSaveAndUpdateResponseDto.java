@@ -2,12 +2,14 @@ package com.softtech.softtechspringboot.Dto;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class ProductSaveAndUpdateResponseDto {
 
     private String name;
-    private Double taxFreePrice;
+    private BigDecimal taxFreePrice;
     private Long categoryId;
-    private Double lastPriceWithTax;
-    private Double taxPrice;
+    private BigDecimal lastPriceWithTax;
+    private BigDecimal taxPrice;
 }

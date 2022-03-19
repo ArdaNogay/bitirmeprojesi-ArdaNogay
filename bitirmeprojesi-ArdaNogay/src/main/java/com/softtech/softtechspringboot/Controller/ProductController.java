@@ -4,7 +4,6 @@ package com.softtech.softtechspringboot.Controller;
 import com.softtech.softtechspringboot.Dto.GeneralResponse;
 import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateRequestDto;
 import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateResponseDto;
-import com.softtech.softtechspringboot.Dto.UserSaveAndUpdateRequestDto;
 import com.softtech.softtechspringboot.Service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -47,10 +47,10 @@ public class ProductController {
         return ResponseEntity.ok(GeneralResponse.of(updateResponseDto));
     }
 
-    @Validated
-    @PutMapping("/by/products/{id}/taxfreeprice/{taxFreePrice}")  //todo:ikinci parametrenin pathi nasıl yazılmalı araştır
-    public ResponseEntity priceUpdate(@PathVariable("id")Long id ,@PathVariable("taxFreePrice") Double taxFreePrice){
-        ProductSaveAndUpdateResponseDto updateResponseDto = productService.productPriceUpdate(id,taxFreePrice);
+    @Validated //Todo: requestbody'e çevir
+    @PatchMapping("/by/products/{id}/taxfreeprice/{taxFreePrice}")  //todo:ikinci parametrenin pathi nasıl yazılmalı araştır
+    public ResponseEntity priceUpdate(@PathVariable("id")Long id ,@PathVariable("taxFreePrice") BigDecimal taxFreePrice){
+        ProductSaveAndUpdateResponseDto updateResponseDto = productService.updateProductPrice(id,taxFreePrice);
         return ResponseEntity.ok(GeneralResponse.of(updateResponseDto));
     }
 

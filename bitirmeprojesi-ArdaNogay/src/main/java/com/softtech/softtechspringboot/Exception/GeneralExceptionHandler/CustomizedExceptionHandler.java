@@ -8,6 +8,7 @@ import com.softtech.softtechspringboot.Exception.InvalidParameterExceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -16,9 +17,9 @@ import java.util.Date;
 
 @RestController
 @ControllerAdvice
-public class ExceptionHandler extends ResponseEntityExceptionHandler {
+public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @org.springframework.web.bind.annotation.ExceptionHandler
+    @ExceptionHandler
     public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest webRequest){
         Date errorDate = new Date();
         String message = ex.getMessage();
@@ -29,7 +30,7 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(generalResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler
+    @ExceptionHandler
     public final ResponseEntity<Object> handleDoesNotExistExceptions(DoesNotExistExceptions ex){
         Date errorDate = new Date();
         String message = ex.getBaseErrorMessage().getMessage();
@@ -40,7 +41,7 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(generalResponse, HttpStatus.NOT_ACCEPTABLE);
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler
+    @ExceptionHandler
     public final ResponseEntity<Object> handleDuplicateEntityExceptions(DuplicateEntityExceptions ex){
         Date errorDate = new Date();
         String message = ex.getBaseErrorMessage().getMessage();
@@ -51,7 +52,7 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(generalResponse, HttpStatus.CONFLICT);
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler
+    @ExceptionHandler
     public final ResponseEntity<Object> handleEntityNotFoundExceptions(EntityNotFoundExceptions ex){
         Date errorDate = new Date();
         String message = ex.getBaseErrorMessage().getMessage();
@@ -62,7 +63,7 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(generalResponse, HttpStatus.NOT_FOUND);
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler
+    @ExceptionHandler
     public final ResponseEntity<Object> handleInvalidParameterExceptions(InvalidParameterExceptions ex){
         Date errorDate = new Date();
         String message = ex.getBaseErrorMessage().getMessage();

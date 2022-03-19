@@ -22,15 +22,14 @@ public class Product extends BaseEntity {
     private String name;
 
     @Column(name ="TAX_FREE_PRICE" ,nullable = false )
-    private Double taxFreePrice; //Todo: BIGDECIMAL yapabilirsen yap bunu
+    private BigDecimal taxFreePrice;
 
     @Column(name = "LAST_PRICE_WITH_TAX" ,nullable = false)
-    private Double lastPriceWithTax;
+    private BigDecimal lastPriceWithTax;
 
     @Column(name = "TAX_PRICE" ,nullable = false)
-    private Double taxPrice;
+    private BigDecimal taxPrice;
 
-    //Todo: Burası ürüntürü
     @Column(name ="ID_CATEGORY" ,nullable = false)
     private Long categoryId;
 

@@ -9,6 +9,7 @@ import com.softtech.softtechspringboot.Exception.DoesNotExistExceptions;
 import com.softtech.softtechspringboot.Exception.DuplicateEntityExceptions;
 import com.softtech.softtechspringboot.Service.EntityService.UserEntityService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,13 +19,15 @@ import java.util.List;
 public class UserService {
 
     private final UserEntityService userEntityService;
+    private final PasswordEncoder passwordEncoder;
 
     public UserSaveAndUpdateRequestDto save(UserSaveAndUpdateRequestDto userSaveAndUpdateRequestDto){
         isUserNameExist(userSaveAndUpdateRequestDto);
         User user = UserMapper.INSTANCE.convertToUser(userSaveAndUpdateRequestDto);
+        String password = passwordEncoder.encode(user.getPassword());
+        user.setPassword(password);
         userEntityService.save(user);
-        UserSaveAndUpdateRequestDto saveRequestDto = UserMapper
-                .INSTANCE.convertToUserSaveAndUpdateRequestDto(user);
+        UserSaveAndUpdateRequestDto saveRequestDto = UserMapper.INSTANCE.convertToUserSaveAndUpdateRequestDto(user);
         return saveRequestDto;
     }
 

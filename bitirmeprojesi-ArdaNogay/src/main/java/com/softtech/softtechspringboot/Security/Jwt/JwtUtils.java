@@ -1,5 +1,6 @@
-package com.softtech.softtechspringboot.Security.Security;
+package com.softtech.softtechspringboot.Security.Jwt;
 
+import com.softtech.softtechspringboot.Security.Service.JwtUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @Component
-public class JwtTokenGenerator {
+public class JwtUtils {
 
     @Value("${softtechspringboot.jwt.security.app.key}")
     private String APP_KEY;

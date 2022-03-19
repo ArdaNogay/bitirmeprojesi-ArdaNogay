@@ -1,4 +1,4 @@
-package com.softtech.softtechspringboot.Security.Security;
+package com.softtech.softtechspringboot.Security.Service;
 
 import com.softtech.softtechspringboot.Entity.User;
 import org.springframework.security.core.GrantedAuthority;

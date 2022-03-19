@@ -4,7 +4,10 @@ import com.softtech.softtechspringboot.Entity.BaseEntity.BaseAdditionalFields;
 import com.softtech.softtechspringboot.Entity.BaseEntity.BaseEntity;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.GeneralErrorMessage;
 import com.softtech.softtechspringboot.Exception.EntityNotFoundExceptions;
+import com.softtech.softtechspringboot.Security.Service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +20,13 @@ import java.util.Optional;
 public abstract class BaseEntityService<Entity extends BaseEntity, Dao extends JpaRepository<Entity, Long>> {
 
     private final Dao dao;
+
+    private AuthenticationService authenticationService;
+
+    @Autowired /** Circular dependency*/
+    public void setAuthenticationService(@Lazy AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
+    }
 
     public Dao getDao() {
         return dao;
@@ -77,8 +87,7 @@ public abstract class BaseEntityService<Entity extends BaseEntity, Dao extends J
     }
 
     public Long getCurrentCustomerId() {
-//        Long currentCustomerId = authenticationService.getCurrentCustomerId();
-        Long currentCustomerId = null; //Todo: After Jwt
+        Long currentCustomerId = authenticationService.getCurrentUserId();
         return currentCustomerId;
     }
 

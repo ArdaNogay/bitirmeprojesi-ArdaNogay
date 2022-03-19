@@ -1,4 +1,4 @@
-package com.softtech.softtechspringboot.Security.Security;
+package com.softtech.softtechspringboot.Security.Service;
 
 import com.softtech.softtechspringboot.Entity.User;
 import com.softtech.softtechspringboot.Service.EntityService.UserEntityService;
@@ -22,7 +22,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         return JwtUserDetails.create(userByUserName);
     }
 
-    public UserDetails loadUserByUsername(Long id) {
+    public UserDetails loadUserByUserId(Long id) {
 
         User user = userEntityService.getByIdWithControl(id);
 

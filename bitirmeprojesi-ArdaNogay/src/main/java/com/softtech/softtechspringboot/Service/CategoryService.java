@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.math.BigDecimal;
+
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +62,7 @@ public class CategoryService {
     }
 
     private void taxValidation(CategorySaveAndUpdateRequestDto categorySaveAndUpdateRequestDto) {
-        if (categorySaveAndUpdateRequestDto.getTax() < 0) {
+        if (categorySaveAndUpdateRequestDto.getTax().compareTo(BigDecimal.ZERO)==-1) {
             throw new InvalidParameterExceptions(CategoryErrorMessage.TAX_MUST_BE_ZERO_OR_GREATER);
         }
     }

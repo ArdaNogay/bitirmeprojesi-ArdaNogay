@@ -5,9 +5,7 @@ import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateResponseDto;
 import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateRequestDto;
 import com.softtech.softtechspringboot.Entity.Category;
 import com.softtech.softtechspringboot.Entity.Product;
-import com.softtech.softtechspringboot.Enum.ErrorEnums.GeneralErrorMessage;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.ProductErrorMessage;
-import com.softtech.softtechspringboot.Exception.EntityNotFoundExceptions;
 import com.softtech.softtechspringboot.Exception.InvalidParameterExceptions;
 import com.softtech.softtechspringboot.Service.EntityService.CategoryEntityService;
 import com.softtech.softtechspringboot.Service.EntityService.ProductEntityService;
@@ -15,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -24,8 +23,8 @@ public class ProductService {
     private final CategoryEntityService categoryEntityService;
 
     public ProductSaveAndUpdateResponseDto save(ProductSaveAndUpdateRequestDto productSaveAndUpdateRequestDto){
-        mandatoryFieldCheck(productSaveAndUpdateRequestDto);
-        priceValidation(productSaveAndUpdateRequestDto);
+        checkMandatoryField(productSaveAndUpdateRequestDto);
+        priceValidation(productSaveAndUpdateRequestDto.getTaxFreePrice());
         ProductSaveAndUpdateResponseDto responseDto = taxConfigurator(productSaveAndUpdateRequestDto);
         Product product = ProductMapper.INSTANCE.convertToProduct(responseDto);
         productEntityService.save(product);
@@ -34,22 +33,11 @@ public class ProductService {
     }
 
     public ProductSaveAndUpdateResponseDto update(Long id , ProductSaveAndUpdateRequestDto productSaveAndUpdateRequestDto){
-        mandatoryFieldCheck(productSaveAndUpdateRequestDto);
-        priceValidation(productSaveAndUpdateRequestDto);
+        checkMandatoryField(productSaveAndUpdateRequestDto);
+        priceValidation(productSaveAndUpdateRequestDto.getTaxFreePrice());
         productEntityService.entityExistValidation(id);
         ProductSaveAndUpdateResponseDto productSaveAndUpdateDto = taxConfigurator(productSaveAndUpdateRequestDto);
         Product product = productUpdateMapping(id, productSaveAndUpdateDto);
-        ProductSaveAndUpdateResponseDto updateResponseDto = ProductMapper.INSTANCE.convertToProductSaveAndUpdateResponseDto(product);
-        return updateResponseDto;
-    }
-
-    public ProductSaveAndUpdateResponseDto productPriceUpdate(Long id, Double taxFreePrice){
-        priceValidation(taxFreePrice);
-        Product product = productEntityService.getByIdWithControl(id);
-        ProductSaveAndUpdateRequestDto updateRequestDto = ProductMapper.INSTANCE.convertToProductSaveAndUpdateRequestDto(product);
-        updateRequestDto.setTaxFreePrice(taxFreePrice);
-        ProductSaveAndUpdateResponseDto productSaveAndUpdateDto = taxConfigurator(updateRequestDto);
-        product = productUpdateMapping(id, productSaveAndUpdateDto);
         ProductSaveAndUpdateResponseDto updateResponseDto = ProductMapper.INSTANCE.convertToProductSaveAndUpdateResponseDto(product);
         return updateResponseDto;
     }
@@ -66,6 +54,17 @@ public class ProductService {
         return  requestDtoList;
     }
 
+    public ProductSaveAndUpdateResponseDto updateProductPrice(Long id, BigDecimal taxFreePrice){
+        priceValidation(taxFreePrice);
+        Product product = productEntityService.getByIdWithControl(id);
+        ProductSaveAndUpdateRequestDto updateRequestDto = ProductMapper.INSTANCE.convertToProductSaveAndUpdateRequestDto(product);
+        updateRequestDto.setTaxFreePrice(taxFreePrice);
+        ProductSaveAndUpdateResponseDto productSaveAndUpdateDto = taxConfigurator(updateRequestDto);
+        product = productUpdateMapping(id, productSaveAndUpdateDto);
+        ProductSaveAndUpdateResponseDto updateResponseDto = ProductMapper.INSTANCE.convertToProductSaveAndUpdateResponseDto(product);
+        return updateResponseDto;
+    }
+
     public List<ProductSaveAndUpdateResponseDto> findAll(){
         List<Product> productList = productEntityService.findAll();
         List<ProductSaveAndUpdateResponseDto> requestDtoList = ProductMapper.INSTANCE
@@ -74,19 +73,18 @@ public class ProductService {
     }
 
     private ProductSaveAndUpdateResponseDto taxConfigurator(ProductSaveAndUpdateRequestDto productSaveAndUpdateRequestDto) {
-        Double tax = taxCaller(productSaveAndUpdateRequestDto.getCategoryId());
-        Double taxFreePrice = productSaveAndUpdateRequestDto.getTaxFreePrice();
-        Double lastPriceWithTax = taxFreePrice + ((tax/100) * taxFreePrice);
-
+        BigDecimal tax = taxCaller(productSaveAndUpdateRequestDto.getCategoryId());
+        BigDecimal taxFreePrice = productSaveAndUpdateRequestDto.getTaxFreePrice();
+        BigDecimal lastPriceWithTax = calculateLastPriceWithTax(taxFreePrice, tax);
         ProductSaveAndUpdateResponseDto productSaveAndUpdateDto = ProductMapper.INSTANCE.convertToProductSaveAndUpdateResponseDto(productSaveAndUpdateRequestDto);
         productSaveAndUpdateDto.setLastPriceWithTax(lastPriceWithTax);
-        productSaveAndUpdateDto.setTaxPrice(lastPriceWithTax-taxFreePrice);
+        productSaveAndUpdateDto.setTaxPrice(lastPriceWithTax.subtract(taxFreePrice));
         return productSaveAndUpdateDto;
     }
 
-    private Double taxCaller(Long categoryId) {
+    private BigDecimal taxCaller(Long categoryId) {
         Category category = categoryEntityService.getByIdWithControl(categoryId);
-        Double tax = category.getTax();
+        BigDecimal tax = category.getTax();
         return tax;
     }
     
@@ -102,22 +100,16 @@ public class ProductService {
         return product;
     }
 
-    private void priceValidation(ProductSaveAndUpdateRequestDto productSaveAndUpdateRequestDto) {
-        Double price = productSaveAndUpdateRequestDto.getTaxFreePrice();
-        if (price<=0 || price == null){
-            throw new InvalidParameterExceptions(ProductErrorMessage.PRICE_MUST_BE_GREATER_THAN_ZERO);
-        }
-    }
-    private void priceValidation(Double taxFreePrice) {
-        Double price = taxFreePrice;
-        if (price<=0 || price == null){
+    private void priceValidation(BigDecimal taxFreePrice) {
+        BigDecimal price = taxFreePrice;
+        if (price.compareTo(BigDecimal.ZERO)!=1 || price == null){
             throw new InvalidParameterExceptions(ProductErrorMessage.PRICE_MUST_BE_GREATER_THAN_ZERO);
         }
     }
 
-    private void mandatoryFieldCheck(ProductSaveAndUpdateRequestDto productSaveAndUpdateRequestDto) {
+    private void checkMandatoryField(ProductSaveAndUpdateRequestDto productSaveAndUpdateRequestDto) {
         String name = productSaveAndUpdateRequestDto.getName();
-        Double taxFreePrice = productSaveAndUpdateRequestDto.getTaxFreePrice();
+        BigDecimal taxFreePrice = productSaveAndUpdateRequestDto.getTaxFreePrice();
         Long categoryId = productSaveAndUpdateRequestDto.getCategoryId();
         if(name == null || taxFreePrice == null || categoryId == null){
             throw new InvalidParameterExceptions(ProductErrorMessage.HAS_BLANK_PRODUCT_PARAMETER);
@@ -131,15 +123,20 @@ public class ProductService {
     }
 
     public void priceRegulator(Long categoryId){
-        Double tax = taxCaller(categoryId);
+        BigDecimal tax = taxCaller(categoryId);
         List<Product> productList = productEntityService.findAll();
         for (Product product : productList) {
-            Double taxFreePrice = product.getTaxFreePrice();
-            Double lastPriceWithTax = taxFreePrice + ((tax/100) * taxFreePrice);
+            BigDecimal taxFreePrice = product.getTaxFreePrice();
+            BigDecimal lastPriceWithTax = calculateLastPriceWithTax(taxFreePrice, tax);
             product.setLastPriceWithTax(lastPriceWithTax);
-            product.setTaxPrice(lastPriceWithTax-taxFreePrice);
+            product.setTaxPrice(lastPriceWithTax.subtract(taxFreePrice));
             productEntityService.save(product);
         }
+    }
+
+    private BigDecimal calculateLastPriceWithTax(BigDecimal taxFreePrice, BigDecimal tax) {
+        BigDecimal lastPriceWithTax = taxFreePrice.add((tax.divide(new BigDecimal(100))).multiply(taxFreePrice));
+        return lastPriceWithTax;
     }
 
 }
