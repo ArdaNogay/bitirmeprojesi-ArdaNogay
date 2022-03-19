@@ -6,12 +6,14 @@ import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateRequestDto;
 import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateResponseDto;
 import com.softtech.softtechspringboot.Service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -30,6 +32,12 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity findProductsByCategoryId(@PathVariable("id") Long id){
         List<ProductSaveAndUpdateResponseDto> responseDtoList = productService.findProductsByCategoryId(id);
+        return ResponseEntity.ok(GeneralResponse.of(responseDtoList));
+    }
+
+    @GetMapping("/by/filtered/price")
+    public ResponseEntity filterByPrice(@RequestParam("smallPrice") BigDecimal smallPrice, @RequestParam("bigPrice") BigDecimal bigPrice){
+        List<ProductSaveAndUpdateResponseDto> responseDtoList = productService.findProductsByLastPriceWithTaxBetween(smallPrice, bigPrice);
         return ResponseEntity.ok(GeneralResponse.of(responseDtoList));
     }
 
@@ -59,6 +67,5 @@ public class ProductController {
         productService.delete(id);
         return ResponseEntity.ok(GeneralResponse.empty());
     }
-
 
 }
