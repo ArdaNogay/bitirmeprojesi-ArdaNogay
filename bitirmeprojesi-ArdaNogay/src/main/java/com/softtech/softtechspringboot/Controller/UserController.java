@@ -5,7 +5,10 @@ import com.softtech.softtechspringboot.Dto.UserDeleteDto;
 import com.softtech.softtechspringboot.Dto.UserSaveAndUpdateRequestDto;
 import com.softtech.softtechspringboot.Service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +32,13 @@ public class UserController {
     @PostMapping
     public ResponseEntity save(@RequestBody @Valid UserSaveAndUpdateRequestDto userSaveAndUpdateRequestDto){
         UserSaveAndUpdateRequestDto saveRequestDto = userService.save(userSaveAndUpdateRequestDto);
-        return ResponseEntity.ok(GeneralResponse.of(saveRequestDto));
+
+        WebMvcLinkBuilder linkFindAll = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).findAll());
+        EntityModel entityModel = EntityModel.of(saveRequestDto);
+        entityModel.add(linkFindAll.withRel("Find all users"));
+        MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(entityModel);
+
+        return ResponseEntity.ok(GeneralResponse.of(mappingJacksonValue));
     }
 
     @Validated
