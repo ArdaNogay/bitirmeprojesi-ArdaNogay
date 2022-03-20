@@ -44,11 +44,12 @@ public class ProductService {
     }
 
     public void delete(Long id){
-        Product product = productEntityService.getById(id);
+        Product product = productEntityService.getByIdWithControl(id);
         productEntityService.delete(product);
     }
 
     public List<ProductSaveAndUpdateResponseDto> findProductsByCategoryId(Long id){
+        categoryEntityService.entityExistValidation(id);
         List<Product> productListByCategoryId = productEntityService.findProductsByCategoryId(id);
         List<ProductSaveAndUpdateResponseDto> requestDtoList = ProductMapper.INSTANCE
                 .convertToProductSaveAndUpdateResponseDtoList(productListByCategoryId);
@@ -97,7 +98,7 @@ public class ProductService {
     
 
     private Product productUpdateMapping(Long id, ProductSaveAndUpdateResponseDto productSaveAndUpdateDto) {
-        Product product = productEntityService.getById(id);
+        Product product = productEntityService.getByIdWithControl(id);
         product.setName(productSaveAndUpdateDto.getName());
         product.setTaxFreePrice(productSaveAndUpdateDto.getTaxFreePrice());
         product.setCategoryId(productSaveAndUpdateDto.getCategoryId());

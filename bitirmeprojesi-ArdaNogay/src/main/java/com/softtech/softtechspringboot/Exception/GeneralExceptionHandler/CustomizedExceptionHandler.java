@@ -55,7 +55,7 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler
     public final ResponseEntity<Object> handleEntityNotFoundExceptions(EntityNotFoundExceptions ex){
         Date errorDate = new Date();
-        String message = ex.getBaseErrorMessage().getMessage()+"-->"+ex.getMessage();
+        String message = ex.getBaseErrorMessage().getMessage()+" --> "+ex.getMessage();
         String detailMessage = ex.getBaseErrorMessage().getDetailMessage();
         ExceptionResponse exceptionResponse = new ExceptionResponse(errorDate,message,detailMessage,HttpStatus.NOT_FOUND.value());
         GeneralResponse<ExceptionResponse> generalResponse = GeneralResponse.error(exceptionResponse);
