@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @AllArgsConstructor
 @NoArgsConstructor
 @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-public class BusinessException extends RuntimeException{
+public class BusinessException extends RuntimeException {
     private BaseErrorMessage baseErrorMessage;
+
+    public BusinessException(BaseErrorMessage baseErrorMessage, String className) {
+        super(className);
+        this.baseErrorMessage = baseErrorMessage;
+    }
 }

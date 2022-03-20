@@ -10,4 +10,8 @@ public class EntityNotFoundExceptions extends BusinessException{
     public EntityNotFoundExceptions(BaseErrorMessage baseErrorMessage) {
         super(baseErrorMessage);
     }
+    public EntityNotFoundExceptions(BaseErrorMessage baseErrorMessage ,String className) {
+        super(baseErrorMessage,className);
+    }
+
 }

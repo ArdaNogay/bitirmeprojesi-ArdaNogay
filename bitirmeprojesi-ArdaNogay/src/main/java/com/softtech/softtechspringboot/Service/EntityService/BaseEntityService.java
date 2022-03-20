@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +24,11 @@ public abstract class BaseEntityService<Entity extends BaseEntity, Dao extends J
 
     private AuthenticationService authenticationService;
 
-    @Autowired /** Circular dependency*/
+    private final String className = ((Class<Entity>) ((ParameterizedType) getClass()
+            .getGenericSuperclass()).getActualTypeArguments()[0]).getSimpleName();
+
+    @Autowired
+    /** Circular dependency*/
     public void setAuthenticationService(@Lazy AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
@@ -32,7 +37,7 @@ public abstract class BaseEntityService<Entity extends BaseEntity, Dao extends J
         return dao;
     }
 
-    public Entity save(Entity entity){
+    public Entity save(Entity entity) {
         setAdditionalFields(entity);
         return dao.save(entity);
     }
@@ -43,12 +48,12 @@ public abstract class BaseEntityService<Entity extends BaseEntity, Dao extends J
 
         Long currentCustomerId = getCurrentCustomerId();
 
-        if (baseAdditionalFields == null){
+        if (baseAdditionalFields == null) {
             baseAdditionalFields = new BaseAdditionalFields();
             entity.setBaseAdditionalFields(baseAdditionalFields);
         }
 
-        if (entity.getId() == null){
+        if (entity.getId() == null) {
             baseAdditionalFields.setCreateDate(new Date());
             baseAdditionalFields.setCreatedBy(currentCustomerId);
         }
@@ -57,32 +62,32 @@ public abstract class BaseEntityService<Entity extends BaseEntity, Dao extends J
         baseAdditionalFields.setUpdatedBy(currentCustomerId);
     }
 
-    public List<Entity> findAll(){
+    public List<Entity> findAll() {
         List<Entity> entityList = dao.findAll();
-        if (entityList.isEmpty()){
-            throw  new EntityNotFoundExceptions(GeneralErrorMessage.ENTITIES_NOT_FOUND);
+        if (entityList.isEmpty()) {
+            throw new EntityNotFoundExceptions(GeneralErrorMessage.ENTITIES_NOT_FOUND);
         }
         return entityList;
     }
 
-    public Optional<Entity> findById(Long id){
+    public Optional<Entity> findById(Long id) {
         return dao.findById(id);
     }
 
     public Entity getByIdWithControl(Long id) {
-        Entity entity =  dao.findById(id).orElseThrow(() -> new EntityNotFoundExceptions(GeneralErrorMessage.ENTITY_NOT_FOUND));
+        Entity entity = dao.findById(id).orElseThrow(() -> new EntityNotFoundExceptions(GeneralErrorMessage.ENTITY_NOT_FOUND, className));
         return entity;
     }
 
-    public void entityExistValidation(Long id){
+    public void entityExistValidation(Long id) {
         Optional<Entity> entityOptional = findById(id);
         Entity entity;
-        if (!entityOptional.isPresent()){
-            throw new EntityNotFoundExceptions(GeneralErrorMessage.ENTITY_NOT_FOUND);
+        if (!entityOptional.isPresent()) {
+            throw new EntityNotFoundExceptions(GeneralErrorMessage.ENTITY_NOT_FOUND, className);
         }
     }
 
-    public void delete(Entity entity){
+    public void delete(Entity entity) {
         dao.delete(entity);
     }
 
