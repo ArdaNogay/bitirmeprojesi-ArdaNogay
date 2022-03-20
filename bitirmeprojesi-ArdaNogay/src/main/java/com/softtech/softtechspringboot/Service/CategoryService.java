@@ -13,13 +13,15 @@ import com.softtech.softtechspringboot.Service.EntityService.CategoryEntityServi
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.math.BigDecimal;
 
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CategoryService {
 
     private final CategoryEntityService categoryEntityService;

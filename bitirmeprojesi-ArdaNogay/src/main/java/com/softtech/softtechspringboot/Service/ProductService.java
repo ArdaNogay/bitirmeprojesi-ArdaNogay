@@ -12,6 +12,7 @@ import com.softtech.softtechspringboot.Service.EntityService.CategoryEntityServi
 import com.softtech.softtechspringboot.Service.EntityService.ProductEntityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ProductService {
     private final ProductEntityService productEntityService;
     private final CategoryEntityService categoryEntityService;
