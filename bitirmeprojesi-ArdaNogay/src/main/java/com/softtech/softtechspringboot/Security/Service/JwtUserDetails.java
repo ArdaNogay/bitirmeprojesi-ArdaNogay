@@ -11,13 +11,13 @@ import java.util.List;
 
 public class JwtUserDetails implements UserDetails {
     private Long id;
-    private String username;
+    private String userName;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    private JwtUserDetails(Long id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    private JwtUserDetails(Long id, String userName, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
-        this.username = username;
+        this.userName = userName;
         this.password = password;
         this.authorities = authorities;
     }
@@ -25,13 +25,13 @@ public class JwtUserDetails implements UserDetails {
     public static JwtUserDetails create(User user) {
 
         Long id = user.getId();
-        String username = user.getUserName();
+        String userName = user.getUserName();
         String password = user.getPassword();
 
         List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
         grantedAuthorityList.add(new SimpleGrantedAuthority("user"));
 
-        return new JwtUserDetails(id, username, password, grantedAuthorityList);
+        return new JwtUserDetails(id, userName, password, grantedAuthorityList);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class JwtUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return userName;
     }
 
     @Override

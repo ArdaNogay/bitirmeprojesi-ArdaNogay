@@ -9,5 +9,5 @@ import java.math.BigDecimal;
 public class CategorySaveAndUpdateRequestDto {
 
     private CategoryType categoryType;
-    private BigDecimal tax; //Todo: BigDecimal yapılacak burası
+    private BigDecimal tax;
 }

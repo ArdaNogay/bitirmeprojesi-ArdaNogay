@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class LoginRequestDto {
 
-    private String userName;    //Todo: userName ---> username olmalı !!
+    private String userName;
     private String password;
 }
