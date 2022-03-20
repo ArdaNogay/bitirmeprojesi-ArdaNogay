@@ -1,6 +1,8 @@
 package com.softtech.softtechspringboot.Service;
 
 import com.softtech.softtechspringboot.Converter.ProductMapper;
+import com.softtech.softtechspringboot.Dto.ProductCategoryDetailResponseDto;
+import com.softtech.softtechspringboot.Dto.ProductCategoryDetailResult;
 import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateResponseDto;
 import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateRequestDto;
 import com.softtech.softtechspringboot.Entity.Category;
@@ -25,7 +27,7 @@ public class ProductService {
     private final ProductEntityService productEntityService;
     private final CategoryEntityService categoryEntityService;
 
-    public ProductSaveAndUpdateResponseDto save(ProductSaveAndUpdateRequestDto productSaveAndUpdateRequestDto){
+    public ProductSaveAndUpdateResponseDto save(ProductSaveAndUpdateRequestDto productSaveAndUpdateRequestDto) {
         checkMandatoryFields(productSaveAndUpdateRequestDto);
         priceValidation(productSaveAndUpdateRequestDto.getTaxFreePrice());
         ProductSaveAndUpdateResponseDto responseDto = taxConfigurator(productSaveAndUpdateRequestDto);
@@ -35,7 +37,7 @@ public class ProductService {
         return saveResponseDto;
     }
 
-    public ProductSaveAndUpdateResponseDto update(Long id , ProductSaveAndUpdateRequestDto productSaveAndUpdateRequestDto){
+    public ProductSaveAndUpdateResponseDto update(Long id, ProductSaveAndUpdateRequestDto productSaveAndUpdateRequestDto) {
         checkMandatoryFields(productSaveAndUpdateRequestDto);
         priceValidation(productSaveAndUpdateRequestDto.getTaxFreePrice());
         productEntityService.entityExistValidation(id);
@@ -45,20 +47,20 @@ public class ProductService {
         return updateResponseDto;
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         Product product = productEntityService.getByIdWithControl(id);
         productEntityService.delete(product);
     }
 
-    public List<ProductSaveAndUpdateResponseDto> findProductsByCategoryId(Long id){
+    public List<ProductSaveAndUpdateResponseDto> findProductsByCategoryId(Long id) {
         categoryEntityService.entityExistValidation(id);
         List<Product> productListByCategoryId = productEntityService.findProductsByCategoryId(id);
         List<ProductSaveAndUpdateResponseDto> requestDtoList = ProductMapper.INSTANCE
                 .convertToProductSaveAndUpdateResponseDtoList(productListByCategoryId);
-        return  requestDtoList;
+        return requestDtoList;
     }
 
-    public ProductSaveAndUpdateResponseDto updateProductPrice(Long id, BigDecimal taxFreePrice){
+    public ProductSaveAndUpdateResponseDto updateProductPrice(Long id, BigDecimal taxFreePrice) {
         priceValidation(taxFreePrice);
         Product product = productEntityService.getByIdWithControl(id);
         ProductSaveAndUpdateRequestDto updateRequestDto = ProductMapper.INSTANCE.convertToProductSaveAndUpdateRequestDto(product);
@@ -69,17 +71,25 @@ public class ProductService {
         return updateResponseDto;
     }
 
-    public List<ProductSaveAndUpdateResponseDto> findAll(){
+    public List<ProductSaveAndUpdateResponseDto> findAll() {
         List<Product> productList = productEntityService.findAll();
         List<ProductSaveAndUpdateResponseDto> requestDtoList = ProductMapper.INSTANCE.convertToProductSaveAndUpdateResponseDtoList(productList);
         return requestDtoList;
     }
-    public List<ProductSaveAndUpdateResponseDto> findProductsByLastPriceWithTaxBetween(BigDecimal smallPrice, BigDecimal bigPrice){
-        priceValidation(smallPrice,bigPrice);
+
+    public List<ProductSaveAndUpdateResponseDto> findProductsByLastPriceWithTaxBetween(BigDecimal smallPrice, BigDecimal bigPrice) {
+        priceValidation(smallPrice, bigPrice);
         controlInputValues(smallPrice, bigPrice);
-        List<Product> productList = productEntityService.findProductsByLastPriceWithTaxBetween(smallPrice,bigPrice);
+        List<Product> productList = productEntityService.findProductsByLastPriceWithTaxBetween(smallPrice, bigPrice);
         List<ProductSaveAndUpdateResponseDto> requestDtoList = ProductMapper.INSTANCE.convertToProductSaveAndUpdateResponseDtoList(productList);
         return requestDtoList;
+    }
+
+    public List<ProductCategoryDetailResponseDto> getProductCategoryDetails() {
+        List<ProductCategoryDetailResult> categoryDetailResultList = productEntityService.getProductCategoryDetails();
+        List<ProductCategoryDetailResponseDto> productCategoryDetailResponseDtoList
+                = ProductMapper.INSTANCE.convertToProductCategoryDetailResponseDto(categoryDetailResultList);
+        return productCategoryDetailResponseDtoList;
     }
 
     private ProductSaveAndUpdateResponseDto taxConfigurator(ProductSaveAndUpdateRequestDto productSaveAndUpdateRequestDto) {
@@ -97,7 +107,7 @@ public class ProductService {
         BigDecimal tax = category.getTax();
         return tax;
     }
-    
+
 
     private Product productUpdateMapping(Long id, ProductSaveAndUpdateResponseDto productSaveAndUpdateDto) {
         Product product = productEntityService.getByIdWithControl(id);
@@ -112,14 +122,14 @@ public class ProductService {
 
     private void priceValidation(BigDecimal... taxFreePrice) { //Todo: Test için burası sıkıntı olur mu?
         for (BigDecimal bigDecimal : taxFreePrice) {
-            if (bigDecimal.compareTo(BigDecimal.ZERO)!=1 || bigDecimal == null){
+            if (bigDecimal.compareTo(BigDecimal.ZERO) != 1 || bigDecimal == null) {
                 throw new InvalidParameterExceptions(ProductErrorMessage.PRICE_MUST_BE_GREATER_THAN_ZERO);
             }
         }
     }
 
     private void controlInputValues(BigDecimal smallPrice, BigDecimal bigPrice) {   //Todo: Yukarıdakiyle çok benzer bir method oldu , burayı  bir daha düşün.
-        if(bigPrice.compareTo(smallPrice)!=1){
+        if (bigPrice.compareTo(smallPrice) != 1) {
             throw new InvalidParameterExceptions(GeneralErrorMessage.INVALID_REQUEST);
         }
     }
@@ -128,18 +138,16 @@ public class ProductService {
         String name = productSaveAndUpdateRequestDto.getName();
         BigDecimal taxFreePrice = productSaveAndUpdateRequestDto.getTaxFreePrice();
         Long categoryId = productSaveAndUpdateRequestDto.getCategoryId();
-        if(name == null || taxFreePrice == null || categoryId == null){
+        if (name == null || taxFreePrice == null || categoryId == null) {
             throw new InvalidParameterExceptions(ProductErrorMessage.HAS_BLANK_PRODUCT_PARAMETER);
-        }
-        else if (!StringUtils.hasText(name)){
+        } else if (!StringUtils.hasText(name)) {
             throw new InvalidParameterExceptions(ProductErrorMessage.HAS_BLANK_PRODUCT_PARAMETER);
-        }
-        else if (categoryId<0){
+        } else if (categoryId < 0) {
             throw new InvalidParameterExceptions(ProductErrorMessage.CATEGORY_ID_MUST_BE_GREATER_THAN_ZERO);
         }
     }
 
-    public void priceRegulator(Long categoryId){
+    public void priceRegulator(Long categoryId) {
         BigDecimal tax = taxCaller(categoryId);
         List<Product> productList = productEntityService.findAll();
         for (Product product : productList) {

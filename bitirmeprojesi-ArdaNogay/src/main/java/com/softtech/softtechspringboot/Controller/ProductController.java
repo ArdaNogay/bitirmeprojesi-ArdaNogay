@@ -2,6 +2,7 @@ package com.softtech.softtechspringboot.Controller;
 
 
 import com.softtech.softtechspringboot.Dto.GeneralResponse;
+import com.softtech.softtechspringboot.Dto.ProductCategoryDetailResponseDto;
 import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateRequestDto;
 import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateResponseDto;
 import com.softtech.softtechspringboot.Service.ProductService;
@@ -36,9 +37,15 @@ public class ProductController {
     }
 
     @GetMapping("/by/filtered/price")
-    public ResponseEntity filterByPrice(@RequestParam("smallPrice") BigDecimal smallPrice, @RequestParam("bigPrice") BigDecimal bigPrice){
+    public ResponseEntity filterByPrice(@RequestParam("min") BigDecimal smallPrice, @RequestParam("max") BigDecimal bigPrice){
         List<ProductSaveAndUpdateResponseDto> responseDtoList = productService.findProductsByLastPriceWithTaxBetween(smallPrice, bigPrice);
         return ResponseEntity.ok(GeneralResponse.of(responseDtoList));
+    }
+
+    @GetMapping("/details")
+    public ResponseEntity getProductCategoryDetails(){
+        List<ProductCategoryDetailResponseDto> productCategoryDetails = productService.getProductCategoryDetails();
+        return ResponseEntity.ok(GeneralResponse.of(productCategoryDetails));
     }
 
     @Validated

@@ -1,5 +1,7 @@
 package com.softtech.softtechspringboot.Converter;
 
+import com.softtech.softtechspringboot.Dto.ProductCategoryDetailResponseDto;
+import com.softtech.softtechspringboot.Dto.ProductCategoryDetailResult;
 import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateResponseDto;
 import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateRequestDto;
 import com.softtech.softtechspringboot.Entity.Product;
@@ -23,4 +25,6 @@ public interface ProductMapper {
     ProductSaveAndUpdateResponseDto convertToProductSaveAndUpdateResponseDto(Product product);
 
     Product convertToProduct(ProductSaveAndUpdateResponseDto productSaveAndUpdateResponseDto);
+
+    List<ProductCategoryDetailResponseDto> convertToProductCategoryDetailResponseDto(List<ProductCategoryDetailResult> productCategoryDetailResultList);
 }

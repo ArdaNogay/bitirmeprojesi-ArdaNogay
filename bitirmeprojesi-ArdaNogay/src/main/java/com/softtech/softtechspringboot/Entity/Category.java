@@ -24,6 +24,6 @@ public class Category extends BaseEntity {
     private CategoryType categoryType;
 
     @Column(name = "TAX" ,nullable = false ,updatable = true)
-    private BigDecimal tax; //Todo: BigDecimal yapılacak burası
+    private BigDecimal tax;
 
 }
