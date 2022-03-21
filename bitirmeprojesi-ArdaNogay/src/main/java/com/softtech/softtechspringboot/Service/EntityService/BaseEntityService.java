@@ -42,26 +42,6 @@ public abstract class BaseEntityService<Entity extends BaseEntity, Dao extends J
         return dao.save(entity);
     }
 
-    private void setAdditionalFields(Entity entity) {
-
-        BaseAdditionalFields baseAdditionalFields = entity.getBaseAdditionalFields();
-
-        Long currentCustomerId = getCurrentCustomerId();
-
-        if (baseAdditionalFields == null) {
-            baseAdditionalFields = new BaseAdditionalFields();
-            entity.setBaseAdditionalFields(baseAdditionalFields);
-        }
-
-        if (entity.getId() == null) {
-            baseAdditionalFields.setCreateDate(new Date());
-            baseAdditionalFields.setCreatedBy(currentCustomerId);
-        }
-
-        baseAdditionalFields.setUpdateDate(new Date());
-        baseAdditionalFields.setUpdatedBy(currentCustomerId);
-    }
-
     public List<Entity> findAll() {
         List<Entity> entityList = dao.findAll();
         if (entityList.isEmpty()) {
@@ -94,6 +74,26 @@ public abstract class BaseEntityService<Entity extends BaseEntity, Dao extends J
     public Long getCurrentCustomerId() {
         Long currentCustomerId = authenticationService.getCurrentUserId();
         return currentCustomerId;
+    }
+
+    private void setAdditionalFields(Entity entity) {
+
+        BaseAdditionalFields baseAdditionalFields = entity.getBaseAdditionalFields();
+
+        Long currentCustomerId = getCurrentCustomerId();
+
+        if (baseAdditionalFields == null) {
+            baseAdditionalFields = new BaseAdditionalFields();
+            entity.setBaseAdditionalFields(baseAdditionalFields);
+        }
+
+        if (entity.getId() == null) {
+            baseAdditionalFields.setCreateDate(new Date());
+            baseAdditionalFields.setCreatedBy(currentCustomerId);
+        }
+
+        baseAdditionalFields.setUpdateDate(new Date());
+        baseAdditionalFields.setUpdatedBy(currentCustomerId);
     }
 
 }

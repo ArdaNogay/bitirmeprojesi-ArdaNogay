@@ -18,8 +18,4 @@ public class CategoryEntityService extends BaseEntityService<Category ,CategoryD
         return getDao().findByCategoryType(type);
     }
 
-    public Category getById(Long id){
-        return getDao().getById(id);
-    }
-
 }

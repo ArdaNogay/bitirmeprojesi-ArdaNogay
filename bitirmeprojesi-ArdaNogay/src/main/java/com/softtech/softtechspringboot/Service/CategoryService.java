@@ -12,6 +12,7 @@ import com.softtech.softtechspringboot.Exception.InvalidParameterExceptions;
 import com.softtech.softtechspringboot.Service.EntityService.CategoryEntityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +29,7 @@ public class CategoryService {
     private ProductService productService;
 
     @Autowired  /** Circular dependency*/
-    public void setProductService(ProductService productService) {
+    public void setProductService(@Lazy ProductService productService) {
         this.productService = productService;
     }
 
