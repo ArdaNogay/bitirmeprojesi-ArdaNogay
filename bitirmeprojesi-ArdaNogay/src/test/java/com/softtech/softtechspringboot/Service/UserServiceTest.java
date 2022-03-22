@@ -4,7 +4,10 @@ package com.softtech.softtechspringboot.Service;
 import com.softtech.softtechspringboot.Converter.UserMapper;
 import com.softtech.softtechspringboot.Dto.UserSaveAndUpdateRequestDto;
 import com.softtech.softtechspringboot.Entity.User;
+import com.softtech.softtechspringboot.Enum.ErrorEnums.GeneralErrorMessage;
 import com.softtech.softtechspringboot.Exception.DoesNotExistExceptions;
+import com.softtech.softtechspringboot.Exception.EntityNotFoundExceptions;
+import com.softtech.softtechspringboot.Exception.InvalidParameterExceptions;
 import com.softtech.softtechspringboot.Service.EntityService.UserEntityService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -69,25 +72,65 @@ class UserServiceTest {
     }
 
     @Test
-    void delete() {
+    void shouldDelete() {
+        userService.delete(anyLong());
+        verify(userEntityService).deleteByIdWithControl(any());
+    }
+
+    @Test
+    void shouldNotDeleteWhenIdNotExist() {
+        doThrow(new InvalidParameterExceptions(GeneralErrorMessage.INVALID_REQUEST)).when(userEntityService).deleteByIdWithControl(anyLong());
+        InvalidParameterExceptions result = assertThrows(InvalidParameterExceptions.class, () -> userService.delete(anyLong()));
+        verify(userEntityService).deleteByIdWithControl(any());
+        assertNotNull(result);
     }
 
     @Test
     void shouldFindAll() {
 
         User user = mock(User.class);
-        List<User>  userList = new ArrayList<>();
+        List<User> userList = new ArrayList<>();
         userList.add(user);
 
         when(userEntityService.findAll()).thenReturn(userList);
 
         List<UserSaveAndUpdateRequestDto> requestDtoList = userService.findAll();
 
-        assertEquals(1,requestDtoList.size());
+        assertEquals(1, requestDtoList.size());
 
     }
 
     @Test
-    void shouldNotFindAll() {
+    void shouldFindAllWhenUserListIsEmpty() {
+
+        List<User> userList = new ArrayList<>();
+
+        when(userEntityService.findAll()).thenReturn(userList);
+
+        List<UserSaveAndUpdateRequestDto> requestDtoList = userService.findAll();
+
+        assertEquals(0, requestDtoList.size());
+    }
+
+    @Test
+    void shouldNotFindAllWhenUserListIsEmpty() {
+
+        List<User> userList = new ArrayList<>();
+
+        when(userEntityService.findAll()).thenReturn(userList);
+
+        List<UserSaveAndUpdateRequestDto> requestDtoList = userService.findAll();
+
+        assertEquals(0, requestDtoList.size());
+    }
+
+    @Test
+    void shouldNotFindAllWhenUserListIsNull() {
+
+        when(userEntityService.findAll()).thenThrow(new EntityNotFoundExceptions(GeneralErrorMessage.ENTITIES_NOT_FOUND));
+
+        EntityNotFoundExceptions e = assertThrows(EntityNotFoundExceptions.class, () -> userService.findAll());
+
+        assertEquals(GeneralErrorMessage.ENTITIES_NOT_FOUND, e.getBaseErrorMessage());
     }
 }

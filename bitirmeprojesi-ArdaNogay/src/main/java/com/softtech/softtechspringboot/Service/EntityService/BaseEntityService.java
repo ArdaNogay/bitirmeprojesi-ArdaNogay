@@ -4,6 +4,7 @@ import com.softtech.softtechspringboot.Entity.BaseEntity.BaseAdditionalFields;
 import com.softtech.softtechspringboot.Entity.BaseEntity.BaseEntity;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.GeneralErrorMessage;
 import com.softtech.softtechspringboot.Exception.EntityNotFoundExceptions;
+import com.softtech.softtechspringboot.Exception.InvalidParameterExceptions;
 import com.softtech.softtechspringboot.Security.Service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,7 @@ public abstract class BaseEntityService<Entity extends BaseEntity, Dao extends J
     private final String className = ((Class<Entity>) ((ParameterizedType) getClass()
             .getGenericSuperclass()).getActualTypeArguments()[0]).getSimpleName();
 
-    @Autowired
-    /** Circular dependency*/
+    @Autowired  /** Circular dependency*/
     public void setAuthenticationService(@Lazy AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
@@ -51,24 +51,27 @@ public abstract class BaseEntityService<Entity extends BaseEntity, Dao extends J
     }
 
     public Optional<Entity> findById(Long id) {
+        if (id==null) {
+            throw new InvalidParameterExceptions(GeneralErrorMessage.INVALID_REQUEST);
+        }
         return dao.findById(id);
     }
 
     public Entity getByIdWithControl(Long id) {
-        Entity entity = dao.findById(id).orElseThrow(() -> new EntityNotFoundExceptions(GeneralErrorMessage.ENTITY_NOT_FOUND, className));
+        Entity entity = findById(id).orElseThrow(() -> new EntityNotFoundExceptions(GeneralErrorMessage.ENTITY_NOT_FOUND, className));
         return entity;
-    }
-
-    public void entityExistValidation(Long id) {
-        Optional<Entity> entityOptional = findById(id);
-        if (!entityOptional.isPresent()) {
-            throw new EntityNotFoundExceptions(GeneralErrorMessage.ENTITY_NOT_FOUND, className);
-        }
     }
 
     public void deleteByIdWithControl(Long id) {
         Entity entity = getByIdWithControl(id);
         dao.delete(entity);
+    }
+
+    public void validateEntityExist(Long id) {
+        Optional<Entity> entityOptional = findById(id);
+        if (!entityOptional.isPresent()) {
+            throw new EntityNotFoundExceptions(GeneralErrorMessage.ENTITY_NOT_FOUND, className);
+        }
     }
 
     public Long getCurrentCustomerId() {

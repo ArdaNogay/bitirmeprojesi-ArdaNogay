@@ -40,7 +40,7 @@ public class ProductService {
     public ProductSaveAndUpdateResponseDto update(Long id, ProductSaveAndUpdateRequestDto productSaveAndUpdateRequestDto) {
         checkMandatoryFields(productSaveAndUpdateRequestDto);
         priceValidation(productSaveAndUpdateRequestDto.getTaxFreePrice());
-        productEntityService.entityExistValidation(id);
+        productEntityService.validateEntityExist(id);
         ProductSaveAndUpdateResponseDto productSaveAndUpdateDto = taxConfigurator(productSaveAndUpdateRequestDto);
         Product product = productUpdateMapping(id, productSaveAndUpdateDto);
         ProductSaveAndUpdateResponseDto updateResponseDto = ProductMapper.INSTANCE.convertToProductSaveAndUpdateResponseDto(product);
@@ -52,7 +52,7 @@ public class ProductService {
     }
 
     public List<ProductSaveAndUpdateResponseDto> findProductsByCategoryId(Long id) {
-        categoryEntityService.entityExistValidation(id);
+        categoryEntityService.validateEntityExist(id);
         List<Product> productListByCategoryId = productEntityService.findProductsByCategoryId(id);
         List<ProductSaveAndUpdateResponseDto> requestDtoList = ProductMapper.INSTANCE
                 .convertToProductSaveAndUpdateResponseDtoList(productListByCategoryId);

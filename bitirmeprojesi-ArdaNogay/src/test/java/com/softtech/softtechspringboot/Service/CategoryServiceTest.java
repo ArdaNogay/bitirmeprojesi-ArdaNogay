@@ -3,6 +3,8 @@ package com.softtech.softtechspringboot.Service;
 import com.softtech.softtechspringboot.Dto.CategorySaveAndUpdateRequestDto;
 import com.softtech.softtechspringboot.Entity.Category;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.CategoryErrorMessage;
+import com.softtech.softtechspringboot.Enum.ErrorEnums.GeneralErrorMessage;
+import com.softtech.softtechspringboot.Exception.EntityNotFoundExceptions;
 import com.softtech.softtechspringboot.Exception.InvalidParameterExceptions;
 import com.softtech.softtechspringboot.Service.EntityService.CategoryEntityService;
 import org.junit.jupiter.api.Test;
@@ -13,8 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -78,27 +79,18 @@ class CategoryServiceTest {
     void update() {
     }
 
-//    @Test
-//    void shouldDelete() {
-//        CategoryDeleteDto categoryDeleteDto = mock(CategoryDeleteDto.class);
-//        when(categoryDeleteDto.getCategoryType()).thenReturn(CategoryType.OTHER);
-////        Category category = mock(Category.class);
-////
-////        when(categoryEntityService.getByIdWithControl(anyLong())).thenReturn(category);
-//
-//        categoryService.delete(categoryDeleteDto);
-//
-////        verify(categoryEntityService).getByIdWithControl(anyLong());
-////        verify(categoryEntityService).delete(any());
-//    }
+    @Test
+    void shouldDelete() {
+        categoryService.delete(anyLong());
+        verify(categoryEntityService).deleteByIdWithControl(any());
+    }
 
-//    @Test
-//    void shouldNotDeleteWhenCategoryTypeIsNull() {
-//        CategoryDeleteDto categoryDeleteDto = mock(CategoryDeleteDto.class);
-//        when(categoryDeleteDto.getCategoryType()).thenReturn(null);
-//
-//        assertThrows(EntityNotFoundExceptions.class, () -> categoryService.delete(categoryDeleteDto));
-//
-//    }
+    @Test
+    void shouldNotDeleteWhenCategoryIdIsInvalid() {
+        doThrow(new InvalidParameterExceptions(GeneralErrorMessage.INVALID_REQUEST)).when(categoryEntityService).deleteByIdWithControl(anyLong());
+        InvalidParameterExceptions result = assertThrows(InvalidParameterExceptions.class, () -> categoryService.delete(anyLong()));
+        verify(categoryEntityService).deleteByIdWithControl(any());
+        assertNotNull(result);
+    }
 
 }

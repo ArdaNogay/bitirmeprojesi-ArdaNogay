@@ -33,7 +33,7 @@ public class UserService {
     }
 
     public UserSaveAndUpdateRequestDto update(Long id,UserSaveAndUpdateRequestDto userSaveAndUpdateRequestDto){
-        userEntityService.entityExistValidation(id);
+        userEntityService.validateEntityExist(id);
         userNameConflictControl(id, userSaveAndUpdateRequestDto);
         User user = userUpdateMapping(id, userSaveAndUpdateRequestDto);
         UserSaveAndUpdateRequestDto updatedRequestDto = UserMapper.INSTANCE.convertToUserSaveAndUpdateRequestDto(user);
