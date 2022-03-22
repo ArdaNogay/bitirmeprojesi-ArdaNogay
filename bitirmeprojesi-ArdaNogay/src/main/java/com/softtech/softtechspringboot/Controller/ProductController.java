@@ -62,9 +62,9 @@ public class ProductController {
         return ResponseEntity.ok(GeneralResponse.of(updateResponseDto));
     }
 
-    @Validated //Todo: requestbody'e çevir
-    @PatchMapping("/by/products/{id}/taxfreeprice/{taxFreePrice}")  //todo:ikinci parametrenin pathi nasıl yazılmalı araştır
-    public ResponseEntity priceUpdate(@PathVariable("id")Long id ,@PathVariable("taxFreePrice") BigDecimal taxFreePrice){
+    @Validated
+    @PatchMapping("/by/products/{id}/")
+    public ResponseEntity priceUpdate(@PathVariable("id")Long id ,@RequestParam("Tax Free Price") BigDecimal taxFreePrice){
         ProductSaveAndUpdateResponseDto updateResponseDto = productService.updateProductPrice(id,taxFreePrice);
         return ResponseEntity.ok(GeneralResponse.of(updateResponseDto));
     }

@@ -1,7 +1,6 @@
 package com.softtech.softtechspringboot.Service;
 
 import com.softtech.softtechspringboot.Converter.CategoryMapper;
-import com.softtech.softtechspringboot.Dto.CategoryDeleteDto;
 import com.softtech.softtechspringboot.Dto.CategorySaveAndUpdateRequestDto;
 import com.softtech.softtechspringboot.Entity.Category;
 import com.softtech.softtechspringboot.Enum.CategoryType;
@@ -51,9 +50,8 @@ public class CategoryService {
         return requestDto;
     }
 
-    public void delete(CategoryDeleteDto categoryDeleteDto) {
-        Category category = categoryExistValidation(categoryDeleteDto.getCategoryType());
-        categoryEntityService.delete(category);
+    public void delete(Long id) {
+        categoryEntityService.deleteByIdWithControl(id);
     }
 
     private Category categoryExistValidation(CategoryType categoryType) {

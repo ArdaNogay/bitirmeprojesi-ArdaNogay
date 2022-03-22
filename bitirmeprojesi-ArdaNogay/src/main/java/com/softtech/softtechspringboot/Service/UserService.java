@@ -1,7 +1,6 @@
 package com.softtech.softtechspringboot.Service;
 
 import com.softtech.softtechspringboot.Converter.UserMapper;
-import com.softtech.softtechspringboot.Dto.UserDeleteDto;
 import com.softtech.softtechspringboot.Dto.UserSaveAndUpdateRequestDto;
 import com.softtech.softtechspringboot.Entity.User;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.UserErrorMessage;
@@ -41,9 +40,8 @@ public class UserService {
         return updatedRequestDto;
             }
 
-    public void delete(UserDeleteDto userDeleteDto){
-        User user = deleteUserValidation(userDeleteDto);
-        userEntityService.delete(user);
+    public void delete(Long id){
+        userEntityService.deleteByIdWithControl(id);
     }
 
     public List<UserSaveAndUpdateRequestDto> findAll(){
@@ -60,7 +58,7 @@ public class UserService {
     }
 
     private User userUpdateMapping(Long id, UserSaveAndUpdateRequestDto userSaveRequestDto) {
-        User user = userEntityService.getById(id);
+        User user = userEntityService.getByIdWithControl(id);
         user.setUserName(userSaveRequestDto.getUserName());
         user.setPassword(userSaveRequestDto.getPassword());
         user.setName(userSaveRequestDto.getName());
@@ -71,17 +69,10 @@ public class UserService {
 
     private void userNameConflictControl(Long id, UserSaveAndUpdateRequestDto userSaveAndUpdateRequestDto) {
         User userToCheck = userEntityService.getUserByUserName(userSaveAndUpdateRequestDto.getUserName());
-        User user = userEntityService.getById(id);
+        User user = userEntityService.getByIdWithControl(id);
         if(user.getId() != userToCheck.getId()){
             throw new DuplicateEntityExceptions(UserErrorMessage.HAS_DUPLICATE_USER_USERNAME);
         }
     }
 
-    private User deleteUserValidation(UserDeleteDto userDeleteDto) {
-        User user = userEntityService.getUserByUserName(userDeleteDto.getUserName());
-        if(user==null){
-            throw new DoesNotExistExceptions(UserErrorMessage.USER_NOT_FOUND_USERNAME);
-        }
-        return user;
-    }
 }

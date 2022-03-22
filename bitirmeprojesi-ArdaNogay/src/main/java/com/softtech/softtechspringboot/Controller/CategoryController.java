@@ -39,9 +39,9 @@ public class CategoryController {
         return ResponseEntity.ok(GeneralResponse.of(updateRequestDto));
     }
 
-    @DeleteMapping
-    public ResponseEntity delete(@RequestBody CategoryDeleteDto categoryDeleteDto){
-        categoryService.delete(categoryDeleteDto);
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id){
+        categoryService.delete(id);
         return ResponseEntity.ok(GeneralResponse.empty());
     }
 }

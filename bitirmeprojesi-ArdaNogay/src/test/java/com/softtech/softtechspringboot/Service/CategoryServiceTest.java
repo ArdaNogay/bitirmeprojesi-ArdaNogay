@@ -1,11 +1,8 @@
 package com.softtech.softtechspringboot.Service;
 
-import com.softtech.softtechspringboot.Dto.CategoryDeleteDto;
 import com.softtech.softtechspringboot.Dto.CategorySaveAndUpdateRequestDto;
 import com.softtech.softtechspringboot.Entity.Category;
-import com.softtech.softtechspringboot.Enum.CategoryType;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.CategoryErrorMessage;
-import com.softtech.softtechspringboot.Exception.EntityNotFoundExceptions;
 import com.softtech.softtechspringboot.Exception.InvalidParameterExceptions;
 import com.softtech.softtechspringboot.Service.EntityService.CategoryEntityService;
 import org.junit.jupiter.api.Test;
@@ -95,13 +92,13 @@ class CategoryServiceTest {
 ////        verify(categoryEntityService).delete(any());
 //    }
 
-    @Test
-    void shouldNotDeleteWhenCategoryTypeIsNull() {
-        CategoryDeleteDto categoryDeleteDto = mock(CategoryDeleteDto.class);
-        when(categoryDeleteDto.getCategoryType()).thenReturn(null);
-
-        assertThrows(EntityNotFoundExceptions.class, () -> categoryService.delete(categoryDeleteDto));
-
-    }
+//    @Test
+//    void shouldNotDeleteWhenCategoryTypeIsNull() {
+//        CategoryDeleteDto categoryDeleteDto = mock(CategoryDeleteDto.class);
+//        when(categoryDeleteDto.getCategoryType()).thenReturn(null);
+//
+//        assertThrows(EntityNotFoundExceptions.class, () -> categoryService.delete(categoryDeleteDto));
+//
+//    }
 
 }

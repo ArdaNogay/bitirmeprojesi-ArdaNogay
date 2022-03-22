@@ -1,7 +1,6 @@
 package com.softtech.softtechspringboot.Controller;
 
 import com.softtech.softtechspringboot.Dto.GeneralResponse;
-import com.softtech.softtechspringboot.Dto.UserDeleteDto;
 import com.softtech.softtechspringboot.Dto.UserSaveAndUpdateRequestDto;
 import com.softtech.softtechspringboot.Service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -48,9 +47,9 @@ public class UserController {
         return ResponseEntity.ok(GeneralResponse.of(updateRequestDto));
     }
 
-    @DeleteMapping
-    public ResponseEntity delete(@RequestBody UserDeleteDto userDeleteDto){
-        userService.delete(userDeleteDto);
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id){
+        userService.delete(id);
         return ResponseEntity.ok(GeneralResponse.empty());
     }
 

@@ -19,11 +19,6 @@ public class UserEntityService extends BaseEntityService<User, UserDao> {
         return getDao().findByUserName(userName);
     }
 
-
-    public User getById(Long id){
-        return getDao().getById(id);
-    }
-
     public User getUserByUserName(String userName){
         User userByUserName = getDao().getUserByUserName(userName);
         if (userByUserName == null) {

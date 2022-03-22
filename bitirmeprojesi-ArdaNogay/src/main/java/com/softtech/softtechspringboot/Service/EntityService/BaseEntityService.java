@@ -61,13 +61,13 @@ public abstract class BaseEntityService<Entity extends BaseEntity, Dao extends J
 
     public void entityExistValidation(Long id) {
         Optional<Entity> entityOptional = findById(id);
-        Entity entity;
         if (!entityOptional.isPresent()) {
             throw new EntityNotFoundExceptions(GeneralErrorMessage.ENTITY_NOT_FOUND, className);
         }
     }
 
-    public void delete(Entity entity) {
+    public void deleteByIdWithControl(Long id) {
+        Entity entity = getByIdWithControl(id);
         dao.delete(entity);
     }
 

@@ -48,8 +48,7 @@ public class ProductService {
     }
 
     public void delete(Long id) {
-        Product product = productEntityService.getByIdWithControl(id);
-        productEntityService.delete(product);
+        productEntityService.deleteByIdWithControl(id);
     }
 
     public List<ProductSaveAndUpdateResponseDto> findProductsByCategoryId(Long id) {
