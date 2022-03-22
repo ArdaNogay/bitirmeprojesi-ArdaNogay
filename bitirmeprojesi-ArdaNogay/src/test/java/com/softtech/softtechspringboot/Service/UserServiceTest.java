@@ -112,17 +112,6 @@ class UserServiceTest {
         assertEquals(0, requestDtoList.size());
     }
 
-    @Test
-    void shouldNotFindAllWhenUserListIsEmpty() {
-
-        List<User> userList = new ArrayList<>();
-
-        when(userEntityService.findAll()).thenReturn(userList);
-
-        List<UserSaveAndUpdateRequestDto> requestDtoList = userService.findAll();
-
-        assertEquals(0, requestDtoList.size());
-    }
 
     @Test
     void shouldNotFindAllWhenUserListIsNull() {
