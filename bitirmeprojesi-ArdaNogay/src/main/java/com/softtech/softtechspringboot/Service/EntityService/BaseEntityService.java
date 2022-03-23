@@ -74,16 +74,16 @@ public abstract class BaseEntityService<Entity extends BaseEntity, Dao extends J
         }
     }
 
-    public Long getCurrentCustomerId() {
-        Long currentCustomerId = authenticationService.getCurrentUserId();
-        return currentCustomerId;
+    public Long getCurrentUserId() {
+        Long currentUserId = authenticationService.getCurrentUserId();
+        return currentUserId;
     }
 
     private void setAdditionalFields(Entity entity) {
 
         BaseAdditionalFields baseAdditionalFields = entity.getBaseAdditionalFields();
 
-        Long currentCustomerId = getCurrentCustomerId();
+        Long currentUserId = getCurrentUserId();
 
         if (baseAdditionalFields == null) {
             baseAdditionalFields = new BaseAdditionalFields();
@@ -92,11 +92,11 @@ public abstract class BaseEntityService<Entity extends BaseEntity, Dao extends J
 
         if (entity.getId() == null) {
             baseAdditionalFields.setCreateDate(new Date());
-            baseAdditionalFields.setCreatedBy(currentCustomerId);
+            baseAdditionalFields.setCreatedBy(currentUserId);
         }
 
         baseAdditionalFields.setUpdateDate(new Date());
-        baseAdditionalFields.setUpdatedBy(currentCustomerId);
+        baseAdditionalFields.setUpdatedBy(currentUserId);
     }
 
 }
