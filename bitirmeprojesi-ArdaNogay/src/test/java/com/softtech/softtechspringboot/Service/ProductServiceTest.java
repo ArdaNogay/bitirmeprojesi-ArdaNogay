@@ -3,8 +3,6 @@ package com.softtech.softtechspringboot.Service;
 import com.softtech.softtechspringboot.Dto.*;
 import com.softtech.softtechspringboot.Entity.Category;
 import com.softtech.softtechspringboot.Entity.Product;
-import com.softtech.softtechspringboot.Entity.User;
-import com.softtech.softtechspringboot.Enum.ErrorEnums.CategoryErrorMessage;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.GeneralErrorMessage;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.ProductErrorMessage;
 import com.softtech.softtechspringboot.Exception.EntityNotFoundExceptions;
@@ -340,17 +338,13 @@ class ProductServiceTest {
     }
 
     @Test
-    void shouldNotFindProductsByLastPriceWithTaxBetween() { //Todo: Burasıda son test!!
-        BigDecimal one = BigDecimal.ONE;
-        BigDecimal two = BigDecimal.valueOf(2);
+    void shouldNotFindProductsByLastPriceWithTaxBetweenWhenMinValueGreaterThanMaxValue() { //Todo: Burasıda son test!!
+        BigDecimal mustBeBigValueButNot = BigDecimal.valueOf(2);
+        BigDecimal mustBeSmallValueButNot = BigDecimal.ONE;
 
-        Product product = mock(Product.class);
+        InvalidParameterExceptions e = assertThrows(InvalidParameterExceptions.class, () -> productService.findProductsByLastPriceWithTaxBetween(mustBeBigValueButNot, mustBeSmallValueButNot));
 
-        List<Product> productList = new ArrayList<>();
-        productList.add(product);
-        when(productEntityService.findProductsByLastPriceWithTaxBetween(any(), any())).thenReturn(productList);
-        List<ProductSaveAndUpdateResponseDto> result = productService.findProductsByLastPriceWithTaxBetween(one, two);
-        assertEquals(1,result.size());
+        assertEquals(GeneralErrorMessage.INVALID_REQUEST,e.getBaseErrorMessage());
     }
 
     @Test
