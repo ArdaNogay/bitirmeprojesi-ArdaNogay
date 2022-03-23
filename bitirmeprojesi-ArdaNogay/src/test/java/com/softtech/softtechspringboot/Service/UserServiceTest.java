@@ -5,7 +5,9 @@ import com.softtech.softtechspringboot.Converter.UserMapper;
 import com.softtech.softtechspringboot.Dto.UserSaveAndUpdateRequestDto;
 import com.softtech.softtechspringboot.Entity.User;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.GeneralErrorMessage;
+import com.softtech.softtechspringboot.Enum.ErrorEnums.UserErrorMessage;
 import com.softtech.softtechspringboot.Exception.DoesNotExistExceptions;
+import com.softtech.softtechspringboot.Exception.DuplicateEntityExceptions;
 import com.softtech.softtechspringboot.Exception.EntityNotFoundExceptions;
 import com.softtech.softtechspringboot.Exception.InvalidParameterExceptions;
 import com.softtech.softtechspringboot.Service.EntityService.UserEntityService;
@@ -68,7 +70,50 @@ class UserServiceTest {
     }
 
     @Test
-    void update() {
+    void shouldUpdate() {
+        UserSaveAndUpdateRequestDto requestDto = mock(UserSaveAndUpdateRequestDto.class);
+        when(requestDto.getUserName()).thenReturn("test");
+
+        User user1 = mock(User.class);
+        when(user1.getId()).thenReturn(1L);
+        when(user1.getPassword()).thenReturn("1234_123");
+        user1.setName("test1");
+
+        User user2 = mock(User.class);
+        when(user2.getId()).thenReturn(1L);
+        user2.setName("test2");
+
+        when(userEntityService.getUserByUserName(anyString())).thenReturn(user1);
+        when(userEntityService.getByIdWithControl(anyLong())).thenReturn(user2);
+        when(userEntityService.save(any())).thenReturn(user1);
+
+        UserSaveAndUpdateRequestDto result = userService.update(1L, requestDto);
+
+        assertEquals("1234_123", result.getPassword());
+    }
+
+    @Test
+    void shouldNotUpdateWhenUserNameExists() {
+        UserSaveAndUpdateRequestDto requestDto = mock(UserSaveAndUpdateRequestDto.class);
+        when(requestDto.getUserName()).thenReturn("test");
+
+        User user1 = mock(User.class);
+        when(user1.getId()).thenReturn(1L);
+        user1.setName("test1");
+
+        User user2 = mock(User.class);
+        when(user2.getId()).thenReturn(2L);
+        user2.setName("test2");
+
+        when(userEntityService.getUserByUserName(anyString())).thenReturn(user1);
+        when(userEntityService.getByIdWithControl(anyLong())).thenReturn(user2);
+
+        DuplicateEntityExceptions e = assertThrows(DuplicateEntityExceptions.class, () -> userService.update(1L, requestDto));
+
+        assertEquals(UserErrorMessage.HAS_DUPLICATE_USER_USERNAME, e.getBaseErrorMessage());
+
+        verify(userEntityService).validateEntityExist(anyLong());
+
     }
 
     @Test

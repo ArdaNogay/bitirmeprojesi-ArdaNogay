@@ -119,7 +119,7 @@ public class ProductService {
         return product;
     }
 
-    private void priceValidation(BigDecimal... taxFreePrice) { //Todo: Test için burası sıkıntı olur mu?
+    private void priceValidation(BigDecimal... taxFreePrice) {
         for (BigDecimal bigDecimal : taxFreePrice) {
             if (bigDecimal.compareTo(BigDecimal.ZERO) != 1 || bigDecimal == null) {
                 throw new InvalidParameterExceptions(ProductErrorMessage.PRICE_MUST_BE_GREATER_THAN_ZERO);
@@ -127,7 +127,7 @@ public class ProductService {
         }
     }
 
-    private void controlInputValues(BigDecimal smallPrice, BigDecimal bigPrice) {   //Todo: Yukarıdakiyle çok benzer bir method oldu , burayı  bir daha düşün.
+    private void controlInputValues(BigDecimal smallPrice, BigDecimal bigPrice) {
         if (bigPrice.compareTo(smallPrice) != 1) {
             throw new InvalidParameterExceptions(GeneralErrorMessage.INVALID_REQUEST);
         }

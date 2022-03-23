@@ -2,11 +2,13 @@ package com.softtech.softtechspringboot.Service;
 
 import com.softtech.softtechspringboot.Dto.CategorySaveAndUpdateRequestDto;
 import com.softtech.softtechspringboot.Entity.Category;
+import com.softtech.softtechspringboot.Entity.Product;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.CategoryErrorMessage;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.GeneralErrorMessage;
 import com.softtech.softtechspringboot.Exception.EntityNotFoundExceptions;
 import com.softtech.softtechspringboot.Exception.InvalidParameterExceptions;
 import com.softtech.softtechspringboot.Service.EntityService.CategoryEntityService;
+import com.softtech.softtechspringboot.Service.EntityService.ProductEntityService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,6 +16,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -24,15 +28,8 @@ class CategoryServiceTest {
     @Mock
     private CategoryEntityService categoryEntityService;
 
-    @Mock
-    private ProductService productService;
-
     @InjectMocks
     private CategoryService categoryService;
-
-//    @Test
-//    void setProductService() {
-//    }
 
     @Test
     void shouldSave() {
@@ -75,9 +72,30 @@ class CategoryServiceTest {
         assertThrows(NullPointerException.class, () -> categoryService.save(null));
     }
 
-    @Test
-    void update() {
-    }
+//    @Test
+//    void update() {
+//        CategorySaveAndUpdateRequestDto requestDto = mock(CategorySaveAndUpdateRequestDto.class);
+//        when(requestDto.getTax()).thenReturn(BigDecimal.ZERO);
+//
+//        Category category = mock(Category.class);
+//        category.setTax(BigDecimal.TEN);
+//        when(category.getId()).thenReturn(1L);
+//
+//        List<Product> productList = new ArrayList<>();
+//        Product product = mock(Product.class);
+//        productList.add(product);
+//        when(product.getTaxFreePrice()).thenReturn(BigDecimal.TEN);
+//
+//        when(categoryEntityService.getByIdWithControl(anyLong())).thenReturn(category);
+//        when(productEntityService.findAll()).thenReturn(productList);
+//        when(productEntityService.save(any())).thenReturn(product);
+//
+//        when(categoryEntityService.findByCategoryType(any())).thenReturn(category);
+//        when(categoryEntityService.save(category)).thenReturn(category);
+//        doNothing().when(productService).priceRegulator(anyLong());
+//        CategorySaveAndUpdateRequestDto result = categoryService.update(requestDto);
+//        assertEquals(BigDecimal.ZERO, result.getTax());
+//    }
 
     @Test
     void shouldDelete() {

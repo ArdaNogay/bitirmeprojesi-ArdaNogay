@@ -1,8 +1,6 @@
 package com.softtech.softtechspringboot.Service;
 
-import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateRequestDto;
-import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateResponseDto;
-import com.softtech.softtechspringboot.Dto.UserSaveAndUpdateRequestDto;
+import com.softtech.softtechspringboot.Dto.*;
 import com.softtech.softtechspringboot.Entity.Category;
 import com.softtech.softtechspringboot.Entity.Product;
 import com.softtech.softtechspringboot.Entity.User;
@@ -104,6 +102,7 @@ class ProductServiceTest {
 
         assertEquals(ProductErrorMessage.HAS_BLANK_PRODUCT_PARAMETER, e.getBaseErrorMessage());
     }
+
     @Test
     void shouldNotSaveWhenTaxFreePriceOfDtoEqualsZero() {
         ProductSaveAndUpdateRequestDto requestDto = mock(ProductSaveAndUpdateRequestDto.class);
@@ -117,6 +116,7 @@ class ProductServiceTest {
 
         assertEquals(ProductErrorMessage.PRICE_MUST_BE_GREATER_THAN_ZERO, e.getBaseErrorMessage());
     }
+
     @Test
     void shouldNotSaveWhenTaxFreePriceOfDtoIsUnderZero() {
         ProductSaveAndUpdateRequestDto requestDto = mock(ProductSaveAndUpdateRequestDto.class);
@@ -151,7 +151,6 @@ class ProductServiceTest {
     }
 
 
-
     @Test
     void shouldUpdate() {
         ProductSaveAndUpdateRequestDto requestDto = mock(ProductSaveAndUpdateRequestDto.class);
@@ -168,9 +167,9 @@ class ProductServiceTest {
         when(category.getTax()).thenReturn(BigDecimal.valueOf(10));
         when(productEntityService.save(any())).thenReturn(product);
 
-        ProductSaveAndUpdateResponseDto result = productService.update(1L,requestDto);
+        ProductSaveAndUpdateResponseDto result = productService.update(1L, requestDto);
 
-        assertEquals(new BigDecimal(5) ,result.getTaxFreePrice());
+        assertEquals(new BigDecimal(5), result.getTaxFreePrice());
 
     }
 
@@ -190,9 +189,28 @@ class ProductServiceTest {
         when(category.getTax()).thenReturn(BigDecimal.valueOf(10));
         when(productEntityService.save(any())).thenReturn(product);
 
-        ProductSaveAndUpdateResponseDto result = productService.update(1L,requestDto);
+        ProductSaveAndUpdateResponseDto result = productService.update(1L, requestDto);
 
-        assertEquals(new BigDecimal(5) ,result.getTaxFreePrice());
+        assertEquals(new BigDecimal(5), result.getTaxFreePrice());
+    }
+
+    @Test
+    void shouldNotUpdateWhenCategoryIdIsUnderZero() {
+        ProductSaveAndUpdateRequestDto requestDto = mock(ProductSaveAndUpdateRequestDto.class);
+        when(requestDto.getName()).thenReturn("name");
+        when(requestDto.getTaxFreePrice()).thenReturn(BigDecimal.valueOf(10));
+        when(requestDto.getCategoryId()).thenReturn(-1L);
+
+        InvalidParameterExceptions e = assertThrows(InvalidParameterExceptions.class, () -> productService.update(1L, requestDto));
+
+        assertEquals(ProductErrorMessage.CATEGORY_ID_MUST_BE_GREATER_THAN_ZERO, e.getBaseErrorMessage());
+
+    }
+
+    @Test
+    void shouldNotUpdateWhenParametersAreNull() {
+
+        assertThrows(NullPointerException.class, () -> productService.update(null, null));
 
     }
 
@@ -221,8 +239,9 @@ class ProductServiceTest {
 
         productService.findProductsByCategoryId(anyLong());
 
-        assertEquals(1,productList.size());
+        assertEquals(1, productList.size());
     }
+
     @Test
     void shouldNotFindProductsByCategoryIdWhenCategoryIdIsNotExist() {
 
@@ -235,7 +254,38 @@ class ProductServiceTest {
     }
 
     @Test
-    void updateProductPrice() {
+    void shouldUpdateProductPrice() {
+        BigDecimal bigDecimalFour = new BigDecimal(4);
+
+        Product product = mock(Product.class);
+        when(productEntityService.getByIdWithControl(anyLong())).thenReturn(product);
+        product.setId(1L);
+        product.setTaxFreePrice(BigDecimal.TEN);
+        product.setCategoryId(2L);
+
+        Category category = mock(Category.class);
+        when(category.getTax()).thenReturn(BigDecimal.valueOf(15));
+        when(categoryEntityService.getByIdWithControl(anyLong())).thenReturn(category);
+        when(productEntityService.save(any())).thenReturn(product);
+
+        ProductSaveAndUpdateResponseDto result = productService.updateProductPrice(1L, bigDecimalFour);
+
+        assertEquals(0, result.getCategoryId());
+    }
+
+    @Test
+    void shouldNotUpdateProductPriceWhenTaxFreePriceIUnderZero() {
+        BigDecimal bigDecimalValue = new BigDecimal(-5);
+        InvalidParameterExceptions e = assertThrows(InvalidParameterExceptions.class, () -> productService.updateProductPrice(1L, bigDecimalValue));
+        assertEquals(ProductErrorMessage.PRICE_MUST_BE_GREATER_THAN_ZERO, e.getBaseErrorMessage());
+    }
+
+    @Test
+    void shouldNotUpdateProductPriceWhenProductIdNotExist() {
+        doThrow(new InvalidParameterExceptions(GeneralErrorMessage.INVALID_REQUEST)).when(productEntityService).getByIdWithControl(anyLong());
+        InvalidParameterExceptions result = assertThrows(InvalidParameterExceptions.class, () -> productService.updateProductPrice(anyLong(), BigDecimal.ONE));
+        verify(productEntityService).getByIdWithControl(any());
+        assertNotNull(result);
     }
 
     @Test
@@ -276,14 +326,72 @@ class ProductServiceTest {
     }
 
     @Test
-    void findProductsByLastPriceWithTaxBetween() {
+    void shouldFindProductsByLastPriceWithTaxBetween() {
+        BigDecimal one = BigDecimal.ONE;
+        BigDecimal two = BigDecimal.valueOf(2);
+
+        Product product = mock(Product.class);
+
+        List<Product> productList = new ArrayList<>();
+        productList.add(product);
+        when(productEntityService.findProductsByLastPriceWithTaxBetween(any(), any())).thenReturn(productList);
+        List<ProductSaveAndUpdateResponseDto> result = productService.findProductsByLastPriceWithTaxBetween(one, two);
+        assertEquals(1,result.size());
     }
 
     @Test
-    void getProductCategoryDetails() {
+    void shouldNotFindProductsByLastPriceWithTaxBetween() { //Todo: Burasıda son test!!
+        BigDecimal one = BigDecimal.ONE;
+        BigDecimal two = BigDecimal.valueOf(2);
+
+        Product product = mock(Product.class);
+
+        List<Product> productList = new ArrayList<>();
+        productList.add(product);
+        when(productEntityService.findProductsByLastPriceWithTaxBetween(any(), any())).thenReturn(productList);
+        List<ProductSaveAndUpdateResponseDto> result = productService.findProductsByLastPriceWithTaxBetween(one, two);
+        assertEquals(1,result.size());
     }
 
     @Test
-    void priceRegulator() {
+    void shouldGetProductCategoryDetails() {
+        List<ProductCategoryDetailResult> responseDtoList = new ArrayList<>();
+
+        when(productEntityService.getProductCategoryDetails()).thenReturn(responseDtoList);
+
+        List<ProductCategoryDetailResponseDto> result = productService.getProductCategoryDetails();
+
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    void shouldPriceRegulator() {
+        Category category = mock(Category.class);
+        when(category.getTax()).thenReturn(BigDecimal.TEN);
+
+        when(categoryEntityService.getByIdWithControl(anyLong())).thenReturn(category);
+
+        Product product = mock(Product.class);
+        when(product.getTaxFreePrice()).thenReturn(BigDecimal.TEN);
+
+        List<Product> productList = new ArrayList<>();
+        productList.add(product);
+        when(productEntityService.findAll()).thenReturn(productList);
+
+        productService.priceRegulator(1L);
+        verify(productEntityService).save(product);
+    }
+
+    @Test
+    void shouldNotPriceRegulatorWhenCategoryIdNull() {
+        assertThrows(NullPointerException.class, () -> productService.priceRegulator(1L));
+    }
+
+    @Test
+    void shouldNotPriceRegulatorWhenCategoryIdNotExist() {
+        doThrow(new InvalidParameterExceptions(GeneralErrorMessage.INVALID_REQUEST)).when(categoryEntityService).getByIdWithControl(anyLong());
+        InvalidParameterExceptions result = assertThrows(InvalidParameterExceptions.class, () -> productService.priceRegulator(anyLong()));
+        verify(categoryEntityService).getByIdWithControl(any());
+        assertNotNull(result);
     }
 }
