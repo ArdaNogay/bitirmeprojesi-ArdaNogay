@@ -19,8 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -57,7 +56,7 @@ class UserControllerTest extends BaseTest {
         UserSaveAndUpdateRequestDto userSaveAndUpdateRequestDto = UserSaveAndUpdateRequestDto.builder()
                 .name("test")
                 .surname("ürün")
-                .userName("testname")
+                .userName("testnameeee")
                 .password("1235")
                 .build();
 
@@ -77,7 +76,15 @@ class UserControllerTest extends BaseTest {
     }
 
     @Test
-    void delete() {
+    void deleteTest() throws Exception {
+
+        MvcResult result = mockMvc.perform(
+                delete(BASE_PATH + "/9").content("9").contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertTrue(isSuccess);
 
     }
 }

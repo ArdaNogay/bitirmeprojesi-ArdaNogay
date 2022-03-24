@@ -20,8 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -93,6 +92,15 @@ class ProductControllerTest extends BaseTest {
     }
 
     @Test
-    void delete() {
+    void deleteTest() throws Exception {
+
+        MvcResult result = mockMvc.perform(
+                delete(BASE_PATH + "/17").content("17").contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertTrue(isSuccess);
+
     }
 }
