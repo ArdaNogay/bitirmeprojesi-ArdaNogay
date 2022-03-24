@@ -6,6 +6,7 @@ import com.softtech.softtechspringboot.Dto.ProductCategoryDetailResponseDto;
 import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateRequestDto;
 import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateResponseDto;
 import com.softtech.softtechspringboot.Service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -22,30 +23,35 @@ public class ProductController {
 
     private final ProductService productService;
 
+    @Operation(tags = "Product Controller")
     @GetMapping
     public ResponseEntity findAll(){
         List<ProductSaveAndUpdateResponseDto> responseDtoList = productService.findAll();
         return ResponseEntity.ok(GeneralResponse.of(responseDtoList));
     }
 
+    @Operation(tags = "Product Controller")
     @GetMapping("/{id}")
     public ResponseEntity findProductsByCategoryId(@PathVariable("id") Long id){
         List<ProductSaveAndUpdateResponseDto> responseDtoList = productService.findProductsByCategoryId(id);
         return ResponseEntity.ok(GeneralResponse.of(responseDtoList));
     }
 
+    @Operation(tags = "Product Controller")
     @GetMapping("/by/filtered/price")
     public ResponseEntity filterByPrice(@RequestParam("min") BigDecimal smallPrice, @RequestParam("max") BigDecimal bigPrice){
         List<ProductSaveAndUpdateResponseDto> responseDtoList = productService.findProductsByLastPriceWithTaxBetween(smallPrice, bigPrice);
         return ResponseEntity.ok(GeneralResponse.of(responseDtoList));
     }
 
+    @Operation(tags = "Product Controller")
     @GetMapping("/details")
     public ResponseEntity getProductCategoryDetails(){
         List<ProductCategoryDetailResponseDto> productCategoryDetails = productService.getProductCategoryDetails();
         return ResponseEntity.ok(GeneralResponse.of(productCategoryDetails));
     }
 
+    @Operation(tags = "Product Controller")
     @Validated
     @PostMapping
     public ResponseEntity save(@RequestBody @Valid ProductSaveAndUpdateRequestDto productSaveAndUpdateRequestDto){
@@ -53,6 +59,7 @@ public class ProductController {
         return ResponseEntity.ok(GeneralResponse.of(saveResponseDto));
     }
 
+    @Operation(tags = "Product Controller")
     @Validated
     @PutMapping("/{id}")
     public ResponseEntity update(@RequestBody @Valid ProductSaveAndUpdateRequestDto productSaveAndUpdateRequestDto ,@PathVariable("id") Long id){
@@ -60,6 +67,7 @@ public class ProductController {
         return ResponseEntity.ok(GeneralResponse.of(updateResponseDto));
     }
 
+    @Operation(tags = "Product Controller")
     @Validated
     @PatchMapping("/by/products/{id}/")
     public ResponseEntity priceUpdate(@PathVariable("id")Long id ,@RequestParam("Tax Free Price") BigDecimal taxFreePrice){
@@ -67,6 +75,7 @@ public class ProductController {
         return ResponseEntity.ok(GeneralResponse.of(updateResponseDto));
     }
 
+    @Operation(tags = "Product Controller")
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id){
         productService.delete(id);

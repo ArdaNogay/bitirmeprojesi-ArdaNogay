@@ -96,7 +96,7 @@ class UserControllerTest extends BaseTest {
         UserSaveAndUpdateRequestDto userSaveAndUpdateRequestDto = UserSaveAndUpdateRequestDto.builder()
                 .name("Test")
                 .surname("try")
-                .userName("admining")
+                .userName("hop")
                 .password("1235")
                 .build();
 
@@ -109,6 +109,26 @@ class UserControllerTest extends BaseTest {
         boolean isSuccess = isSuccess(result);
 
         assertTrue(isSuccess);
+    }
+
+    @Test
+    void shouldNotUpdateWhenUserNameExist() throws Exception {
+        UserSaveAndUpdateRequestDto userSaveAndUpdateRequestDto = UserSaveAndUpdateRequestDto.builder()
+                .name("Test")
+                .surname("try")
+                .userName("testname")
+                .password("1235")
+                .build();
+
+        String content = objectMapper.writeValueAsString(userSaveAndUpdateRequestDto);
+
+        MvcResult result = mockMvc.perform(
+                put(BASE_PATH + "/10").content(content).contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isConflict()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertFalse(isSuccess);
     }
 
     @Test
