@@ -1,7 +1,7 @@
 package com.softtech.softtechspringboot.Service.EntityService;
 
-import com.softtech.softtechspringboot.Entity.User;
-import com.softtech.softtechspringboot.Repository.UserDao;
+import com.softtech.softtechspringboot.entity.User;
+import com.softtech.softtechspringboot.repository.UserDao;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

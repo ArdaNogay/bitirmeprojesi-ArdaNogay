@@ -1,6 +1,6 @@
 package com.softtech.softtechspringboot.Security.Service;
 
-import com.softtech.softtechspringboot.Entity.User;
+import com.softtech.softtechspringboot.entity.User;
 import com.softtech.softtechspringboot.Service.EntityService.UserEntityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,7 +1,7 @@
-package com.softtech.softtechspringboot.Repository;
+package com.softtech.softtechspringboot.repository;
 
 import com.softtech.softtechspringboot.Dto.ProductCategoryDetailResult;
-import com.softtech.softtechspringboot.Entity.Product;
+import com.softtech.softtechspringboot.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

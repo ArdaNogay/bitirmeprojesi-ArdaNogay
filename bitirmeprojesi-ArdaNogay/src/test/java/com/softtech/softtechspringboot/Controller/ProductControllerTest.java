@@ -4,7 +4,9 @@ package com.softtech.softtechspringboot.Controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.softtech.softtechspringboot.BaseTest;
+import com.softtech.softtechspringboot.Config.H2TestProfileJPAConfig;
 import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateRequestDto;
+import com.softtech.softtechspringboot.SofttechSpringBootApplication;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest
+@SpringBootTest(classes = {SofttechSpringBootApplication.class, H2TestProfileJPAConfig.class})
 class ProductControllerTest extends BaseTest {
 
     private static final String BASE_PATH = "/api/v1/products";
@@ -64,7 +66,7 @@ class ProductControllerTest extends BaseTest {
     }
 
     @Test
-    void shouldNotFindProductsWhenCategoryIdNotExist() throws Exception {
+    void shouldNotFindProductsWhenCategoryIdDoesNotExist() throws Exception {
         MvcResult result = mockMvc.perform(
                 get(BASE_PATH + "/1999").content("1999L").contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isNotFound()).andReturn();
@@ -77,7 +79,7 @@ class ProductControllerTest extends BaseTest {
     @Test
     void filterByPrice() throws Exception {
         MvcResult result = mockMvc.perform(
-                get(BASE_PATH + "/by/filtered/price?min=20&max=1000").content("").contentType(MediaType.APPLICATION_JSON)
+                get(BASE_PATH + "/between?min=20&max=1000").content("").contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk()).andReturn();
 
         boolean isSuccess = isSuccess(result);
@@ -88,7 +90,7 @@ class ProductControllerTest extends BaseTest {
     @Test
     void shouldNotFilterByPriceWhenInputsInvalid() throws Exception {
         MvcResult result = mockMvc.perform(
-                get(BASE_PATH + "/by/filtered/price?min=100&max=10").content("").contentType(MediaType.APPLICATION_JSON)
+                get(BASE_PATH + "/between?min=100&max=10").content("").contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isBadRequest()).andReturn();
 
         boolean isSuccess = isSuccess(result);
@@ -113,7 +115,7 @@ class ProductControllerTest extends BaseTest {
         ProductSaveAndUpdateRequestDto productSaveAndUpdateRequestDto = ProductSaveAndUpdateRequestDto.builder()
                 .name("test ürün")
                 .taxFreePrice(BigDecimal.TEN)
-                .categoryId(1L)
+                .categoryId(2L)
                 .build();
 
         String content = objectMapper.writeValueAsString(productSaveAndUpdateRequestDto);
@@ -143,18 +145,98 @@ class ProductControllerTest extends BaseTest {
     }
 
     @Test
-    void update() {
+    void update() throws Exception {
+        ProductSaveAndUpdateRequestDto productSaveAndUpdateRequestDto = ProductSaveAndUpdateRequestDto.builder()
+                .name("Cam Bezi")
+                .taxFreePrice(BigDecimal.valueOf(15))
+                .categoryId(5L)
+                .build();
+
+        String content = objectMapper.writeValueAsString(productSaveAndUpdateRequestDto);
+
+        MvcResult result = mockMvc.perform(
+                put(BASE_PATH + "/4").content(content).contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertTrue(isSuccess);
     }
 
     @Test
-    void priceUpdate() {
+    void shouldNotUpdateWhenTaxFreePrıceLessThanZero() throws Exception {
+        ProductSaveAndUpdateRequestDto productSaveAndUpdateRequestDto = ProductSaveAndUpdateRequestDto.builder()
+                .name("Cam Bezi")
+                .taxFreePrice(BigDecimal.valueOf(-15))
+                .categoryId(5L)
+                .build();
+
+
+        String content = objectMapper.writeValueAsString(productSaveAndUpdateRequestDto);
+
+        MvcResult result = mockMvc.perform(
+                put(BASE_PATH + "/4").content(content).contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isBadRequest()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertFalse(isSuccess);
+    }
+
+    @Test
+    void shouldNotUpdateWhenDtoParametersAreNull() throws Exception {
+        ProductSaveAndUpdateRequestDto productSaveAndUpdateRequestDto = ProductSaveAndUpdateRequestDto.builder()
+                .build();
+
+        String content = objectMapper.writeValueAsString(productSaveAndUpdateRequestDto);
+
+        MvcResult result = mockMvc.perform(
+                put(BASE_PATH + "/4").content(content).contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isBadRequest()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertFalse(isSuccess);
+    }
+
+    @Test
+    void updatePrice() throws Exception {
+        MvcResult result = mockMvc.perform(
+                patch(BASE_PATH + "/4?tax-free-price=4").content("").contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertTrue(isSuccess);
+    }
+
+    @Test
+    void shouldNotUpdatePriceWhenTaxFreePrıceLessThanZero() throws Exception {//Todo: Buradayız!!!!!!!!!!
+        MvcResult result = mockMvc.perform(
+                patch(BASE_PATH + "/4?tax-free-price=-4").content("").contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isBadRequest()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertFalse(isSuccess);
+    }
+
+    @Test
+    void shouldNotUpdatePriceWhenProductIdDoesNotExist() throws Exception {//Todo: Buradayız!!!!!!!!!!
+        MvcResult result = mockMvc.perform(
+                patch(BASE_PATH + "/4?tax-free-price=4").content("").contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isNotFound()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertFalse(isSuccess);
     }
 
     @Test
     void deleteTest() throws Exception {
 
         MvcResult result = mockMvc.perform(
-                delete(BASE_PATH + "/17").content("17").contentType(MediaType.APPLICATION_JSON)
+                delete(BASE_PATH + "/1").content("1L").contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk()).andReturn();
 
         boolean isSuccess = isSuccess(result);

@@ -4,7 +4,7 @@ import com.softtech.softtechspringboot.Dto.ProductCategoryDetailResponseDto;
 import com.softtech.softtechspringboot.Dto.ProductCategoryDetailResult;
 import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateResponseDto;
 import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateRequestDto;
-import com.softtech.softtechspringboot.Entity.Product;
+import com.softtech.softtechspringboot.entity.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;

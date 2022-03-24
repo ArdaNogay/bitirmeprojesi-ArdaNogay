@@ -1,7 +1,7 @@
 package com.softtech.softtechspringboot.Converter;
 
 import com.softtech.softtechspringboot.Dto.CategorySaveAndUpdateRequestDto;
-import com.softtech.softtechspringboot.Entity.Category;
+import com.softtech.softtechspringboot.entity.Category;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;

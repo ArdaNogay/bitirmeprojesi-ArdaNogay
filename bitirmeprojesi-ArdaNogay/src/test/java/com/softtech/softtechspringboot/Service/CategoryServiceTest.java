@@ -1,14 +1,11 @@
 package com.softtech.softtechspringboot.Service;
 
 import com.softtech.softtechspringboot.Dto.CategorySaveAndUpdateRequestDto;
-import com.softtech.softtechspringboot.Entity.Category;
-import com.softtech.softtechspringboot.Entity.Product;
+import com.softtech.softtechspringboot.entity.Category;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.CategoryErrorMessage;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.GeneralErrorMessage;
-import com.softtech.softtechspringboot.Exception.EntityNotFoundExceptions;
 import com.softtech.softtechspringboot.Exception.InvalidParameterExceptions;
 import com.softtech.softtechspringboot.Service.EntityService.CategoryEntityService;
-import com.softtech.softtechspringboot.Service.EntityService.ProductEntityService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,8 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

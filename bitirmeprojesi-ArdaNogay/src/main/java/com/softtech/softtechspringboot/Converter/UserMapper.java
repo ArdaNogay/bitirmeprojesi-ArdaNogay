@@ -1,7 +1,7 @@
 package com.softtech.softtechspringboot.Converter;
 
 import com.softtech.softtechspringboot.Dto.UserSaveAndUpdateRequestDto;
-import com.softtech.softtechspringboot.Entity.User;
+import com.softtech.softtechspringboot.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;

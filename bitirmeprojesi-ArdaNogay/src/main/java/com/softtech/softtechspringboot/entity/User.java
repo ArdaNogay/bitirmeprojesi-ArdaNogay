@@ -1,6 +1,6 @@
-package com.softtech.softtechspringboot.Entity;
+package com.softtech.softtechspringboot.entity;
 
-import com.softtech.softtechspringboot.Entity.BaseEntity.BaseEntity;
+import com.softtech.softtechspringboot.entity.BaseEntity.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 

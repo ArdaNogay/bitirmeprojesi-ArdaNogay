@@ -3,7 +3,9 @@ package com.softtech.softtechspringboot.Controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.softtech.softtechspringboot.BaseTest;
+import com.softtech.softtechspringboot.Config.H2TestProfileJPAConfig;
 import com.softtech.softtechspringboot.Dto.UserSaveAndUpdateRequestDto;
+import com.softtech.softtechspringboot.SofttechSpringBootApplication;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,13 +19,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest
+@SpringBootTest(classes = {SofttechSpringBootApplication.class, H2TestProfileJPAConfig.class})
 class UserControllerTest extends BaseTest {
 
     private static final String BASE_PATH = "/api/v1/users";
@@ -72,26 +73,6 @@ class UserControllerTest extends BaseTest {
     }
 
     @Test
-    void shouldNotSaveWhenUserNameExist() throws Exception {
-        UserSaveAndUpdateRequestDto userSaveAndUpdateRequestDto = UserSaveAndUpdateRequestDto.builder()
-                .name("aadmin")
-                .surname("ürün")
-                .userName("admin")
-                .password("1235")
-                .build();
-
-        String content = objectMapper.writeValueAsString(userSaveAndUpdateRequestDto);
-
-        MvcResult result = mockMvc.perform(
-                post(BASE_PATH).content(content).contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isNotAcceptable()).andReturn();
-
-        boolean isSuccess = isSuccess(result);
-
-        assertFalse(isSuccess);
-    }
-
-    @Test
     void update() throws Exception {
         UserSaveAndUpdateRequestDto userSaveAndUpdateRequestDto = UserSaveAndUpdateRequestDto.builder()
                 .name("Test")
@@ -103,7 +84,7 @@ class UserControllerTest extends BaseTest {
         String content = objectMapper.writeValueAsString(userSaveAndUpdateRequestDto);
 
         MvcResult result = mockMvc.perform(
-                put(BASE_PATH + "/10").content(content).contentType(MediaType.APPLICATION_JSON)
+                put(BASE_PATH + "/1").content(content).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk()).andReturn();
 
         boolean isSuccess = isSuccess(result);
@@ -112,30 +93,10 @@ class UserControllerTest extends BaseTest {
     }
 
     @Test
-    void shouldNotUpdateWhenUserNameExist() throws Exception {
-        UserSaveAndUpdateRequestDto userSaveAndUpdateRequestDto = UserSaveAndUpdateRequestDto.builder()
-                .name("Test")
-                .surname("try")
-                .userName("testname")
-                .password("1235")
-                .build();
-
-        String content = objectMapper.writeValueAsString(userSaveAndUpdateRequestDto);
-
-        MvcResult result = mockMvc.perform(
-                put(BASE_PATH + "/10").content(content).contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isConflict()).andReturn();
-
-        boolean isSuccess = isSuccess(result);
-
-        assertFalse(isSuccess);
-    }
-
-    @Test
     void deleteTest() throws Exception {
 
         MvcResult result = mockMvc.perform(
-                delete(BASE_PATH + "/9").content("9").contentType(MediaType.APPLICATION_JSON)
+                delete(BASE_PATH + "/2").content("2L").contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk()).andReturn();
 
         boolean isSuccess = isSuccess(result);
@@ -148,7 +109,7 @@ class UserControllerTest extends BaseTest {
     void shouldNoDeleteWhenIdDoesNotExist() throws Exception {
 
         MvcResult result = mockMvc.perform(
-                delete(BASE_PATH + "/9999").content("9999").contentType(MediaType.APPLICATION_JSON)
+                delete(BASE_PATH + "/29").content("29L").contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isNotFound()).andReturn();
 
         boolean isSuccess = isSuccess(result);

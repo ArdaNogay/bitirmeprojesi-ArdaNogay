@@ -3,6 +3,7 @@ package com.softtech.softtechspringboot.Controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.softtech.softtechspringboot.BaseTest;
+import com.softtech.softtechspringboot.Config.H2TestProfileJPAConfig;
 import com.softtech.softtechspringboot.Dto.CategorySaveAndUpdateRequestDto;
 import com.softtech.softtechspringboot.Enum.CategoryType;
 import com.softtech.softtechspringboot.SofttechSpringBootApplication;
@@ -25,7 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest
+@SpringBootTest(classes = {SofttechSpringBootApplication.class, H2TestProfileJPAConfig.class})
 class CategoryControllerTest extends BaseTest {
 
     private static final String BASE_PATH = "/api/v1/categories";
@@ -45,7 +46,7 @@ class CategoryControllerTest extends BaseTest {
     void save() throws Exception {
         CategorySaveAndUpdateRequestDto categorySaveAndUpdateRequestDto = CategorySaveAndUpdateRequestDto.builder()
                 .categoryType(CategoryType.OTHER)
-                .tax(BigDecimal.valueOf(20))
+                .tax(BigDecimal.valueOf(18))
                 .build();
 
         String content = objectMapper.writeValueAsString(categorySaveAndUpdateRequestDto);
@@ -62,8 +63,8 @@ class CategoryControllerTest extends BaseTest {
     @Test
     void update() throws Exception {
         CategorySaveAndUpdateRequestDto categorySaveAndUpdateRequestDto = CategorySaveAndUpdateRequestDto.builder()
-                .categoryType(CategoryType.OTHER)
-                .tax(BigDecimal.valueOf(15))
+                .categoryType(CategoryType.CLOTHING)
+                .tax(BigDecimal.valueOf(20))
                 .build();
 
         String content = objectMapper.writeValueAsString(categorySaveAndUpdateRequestDto);
@@ -77,9 +78,9 @@ class CategoryControllerTest extends BaseTest {
         assertTrue(isSuccess);
     }
     @Test
-    void shouldNotUpdateWhenTaxIsBellowZero() throws Exception {
+    void shouldNotUpdateWhenTaxIsLessThanZero() throws Exception {
         CategorySaveAndUpdateRequestDto categorySaveAndUpdateRequestDto = CategorySaveAndUpdateRequestDto.builder()
-                .categoryType(CategoryType.OTHER)
+                .categoryType(CategoryType.TECHNOLOGY)
                 .tax(BigDecimal.valueOf(-15))
                 .build();
 
@@ -116,7 +117,7 @@ class CategoryControllerTest extends BaseTest {
     void deleteTest() throws Exception {
 
         MvcResult result = mockMvc.perform(
-                delete(BASE_PATH + "/6").content("6").contentType(MediaType.APPLICATION_JSON)
+                delete(BASE_PATH + "/1").content("1").contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk()).andReturn();
 
         boolean isSuccess = isSuccess(result);

@@ -2,7 +2,7 @@ package com.softtech.softtechspringboot.Service;
 
 import com.softtech.softtechspringboot.Converter.UserMapper;
 import com.softtech.softtechspringboot.Dto.UserSaveAndUpdateRequestDto;
-import com.softtech.softtechspringboot.Entity.User;
+import com.softtech.softtechspringboot.entity.User;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.UserErrorMessage;
 import com.softtech.softtechspringboot.Exception.DoesNotExistExceptions;
 import com.softtech.softtechspringboot.Exception.DuplicateEntityExceptions;

@@ -3,6 +3,9 @@ package com.softtech.softtechspringboot.Controller;
 import com.softtech.softtechspringboot.Dto.*;
 import com.softtech.softtechspringboot.Service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -20,7 +23,33 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @Operation(tags = "Category Controller")
+    @Operation(
+            tags = "Category Controller",
+            description = "Saves a new category according to the information filled",
+            summary = "Saves new category",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Categories",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(
+                                            implementation = CategorySaveAndUpdateRequestDto.class
+                                    ),
+                                    examples = {
+                                            @ExampleObject(
+                                                    name = "save a category",
+                                                    summary = "New Category Example",
+                                                    description = "Saves new category based on filled information",
+                                                    value = "{\n" +
+                                                            "  \"CategoryType\": \"FOOD\",\n" +
+                                                            "  \"Tax %...\": \"smith\",\n" +
+                                                            "}"
+                                            )
+                                    }
+                            )
+                    }
+            )
+    )
     @Validated
     @PostMapping
     public ResponseEntity save(@RequestBody @Valid CategorySaveAndUpdateRequestDto categorySaveAndUpdateRequestDto){

@@ -1,6 +1,6 @@
 package com.softtech.softtechspringboot.Security.Service;
 
-import com.softtech.softtechspringboot.Entity.User;
+import com.softtech.softtechspringboot.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

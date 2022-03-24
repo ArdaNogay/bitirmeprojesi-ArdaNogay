@@ -2,7 +2,7 @@ package com.softtech.softtechspringboot.Service;
 
 import com.softtech.softtechspringboot.Converter.CategoryMapper;
 import com.softtech.softtechspringboot.Dto.CategorySaveAndUpdateRequestDto;
-import com.softtech.softtechspringboot.Entity.Category;
+import com.softtech.softtechspringboot.entity.Category;
 import com.softtech.softtechspringboot.Enum.CategoryType;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.CategoryErrorMessage;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.GeneralErrorMessage;

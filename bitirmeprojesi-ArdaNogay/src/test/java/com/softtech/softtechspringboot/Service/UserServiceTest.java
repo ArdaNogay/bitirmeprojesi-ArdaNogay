@@ -1,9 +1,8 @@
 package com.softtech.softtechspringboot.Service;
 
 
-import com.softtech.softtechspringboot.Converter.UserMapper;
 import com.softtech.softtechspringboot.Dto.UserSaveAndUpdateRequestDto;
-import com.softtech.softtechspringboot.Entity.User;
+import com.softtech.softtechspringboot.entity.User;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.GeneralErrorMessage;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.UserErrorMessage;
 import com.softtech.softtechspringboot.Exception.DoesNotExistExceptions;
@@ -124,7 +123,7 @@ class UserServiceTest {
     }
 
     @Test
-    void shouldNotDeleteWhenIdNotExist() {
+    void shouldNotDeleteWhenIdDoesNotExist() {
         doThrow(new InvalidParameterExceptions(GeneralErrorMessage.INVALID_REQUEST)).when(userEntityService).deleteByIdWithControl(anyLong());
         InvalidParameterExceptions result = assertThrows(InvalidParameterExceptions.class, () -> userService.delete(anyLong()));
         verify(userEntityService).deleteByIdWithControl(any());

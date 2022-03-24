@@ -1,8 +1,8 @@
 package com.softtech.softtechspringboot.Service.EntityService;
 
 import com.softtech.softtechspringboot.Dto.ProductCategoryDetailResult;
-import com.softtech.softtechspringboot.Entity.Product;
-import com.softtech.softtechspringboot.Repository.ProductDao;
+import com.softtech.softtechspringboot.entity.Product;
+import com.softtech.softtechspringboot.repository.ProductDao;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

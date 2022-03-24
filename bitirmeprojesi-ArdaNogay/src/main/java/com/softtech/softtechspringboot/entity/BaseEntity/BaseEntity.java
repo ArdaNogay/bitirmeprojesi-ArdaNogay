@@ -1,4 +1,4 @@
-package com.softtech.softtechspringboot.Entity.BaseEntity;
+package com.softtech.softtechspringboot.entity.BaseEntity;
 
 import lombok.Getter;
 import lombok.Setter;

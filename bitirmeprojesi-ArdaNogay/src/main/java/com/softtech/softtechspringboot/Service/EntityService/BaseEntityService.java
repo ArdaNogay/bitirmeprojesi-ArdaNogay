@@ -1,10 +1,9 @@
 package com.softtech.softtechspringboot.Service.EntityService;
 
-import com.softtech.softtechspringboot.Entity.BaseEntity.BaseAdditionalFields;
-import com.softtech.softtechspringboot.Entity.BaseEntity.BaseEntity;
+import com.softtech.softtechspringboot.entity.BaseEntity.BaseAdditionalFields;
+import com.softtech.softtechspringboot.entity.BaseEntity.BaseEntity;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.GeneralErrorMessage;
 import com.softtech.softtechspringboot.Exception.EntityNotFoundExceptions;
-import com.softtech.softtechspringboot.Exception.InvalidParameterExceptions;
 import com.softtech.softtechspringboot.Security.Service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,15 +49,8 @@ public abstract class BaseEntityService<Entity extends BaseEntity, Dao extends J
         return entityList;
     }
 
-    public Optional<Entity> findById(Long id) {
-        if (id==null) {
-            throw new InvalidParameterExceptions(GeneralErrorMessage.INVALID_REQUEST);
-        }
-        return dao.findById(id);
-    }
-
     public Entity getByIdWithControl(Long id) {
-        Entity entity = findById(id).orElseThrow(() -> new EntityNotFoundExceptions(GeneralErrorMessage.ENTITY_NOT_FOUND, className));
+        Entity entity = dao.findById(id).orElseThrow(() -> new EntityNotFoundExceptions(GeneralErrorMessage.ENTITY_NOT_FOUND, className));
         return entity;
     }
 
@@ -68,7 +60,7 @@ public abstract class BaseEntityService<Entity extends BaseEntity, Dao extends J
     }
 
     public void validateEntityExist(Long id) {
-        Optional<Entity> entityOptional = findById(id);
+        Optional<Entity> entityOptional = dao.findById(id);
         if (!entityOptional.isPresent()) {
             throw new EntityNotFoundExceptions(GeneralErrorMessage.ENTITY_NOT_FOUND, className);
         }

@@ -1,8 +1,8 @@
 package com.softtech.softtechspringboot.Service;
 
 import com.softtech.softtechspringboot.Dto.*;
-import com.softtech.softtechspringboot.Entity.Category;
-import com.softtech.softtechspringboot.Entity.Product;
+import com.softtech.softtechspringboot.entity.Category;
+import com.softtech.softtechspringboot.entity.Product;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.GeneralErrorMessage;
 import com.softtech.softtechspringboot.Enum.ErrorEnums.ProductErrorMessage;
 import com.softtech.softtechspringboot.Exception.EntityNotFoundExceptions;
@@ -219,7 +219,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void shouldNotDeleteWhenIdNotExist() {
+    void shouldNotDeleteWhenIdDoesNotExist() {
         doThrow(new InvalidParameterExceptions(GeneralErrorMessage.INVALID_REQUEST)).when(productEntityService).deleteByIdWithControl(anyLong());
         InvalidParameterExceptions result = assertThrows(InvalidParameterExceptions.class, () -> productService.delete(anyLong()));
         verify(productEntityService).deleteByIdWithControl(any());
@@ -241,7 +241,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void shouldNotFindProductsByCategoryIdWhenCategoryIdIsNotExist() {
+    void shouldNotFindProductsByCategoryIdWhenCategoryIdDoesNotExist() {
 
         doThrow(new EntityNotFoundExceptions(GeneralErrorMessage.ENTITY_NOT_FOUND)).when(categoryEntityService).validateEntityExist(anyLong());
 
@@ -279,7 +279,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void shouldNotUpdateProductPriceWhenProductIdNotExist() {
+    void shouldNotUpdateProductPriceWhenProductIdDoesNotExist() {
         doThrow(new InvalidParameterExceptions(GeneralErrorMessage.INVALID_REQUEST)).when(productEntityService).getByIdWithControl(anyLong());
         InvalidParameterExceptions result = assertThrows(InvalidParameterExceptions.class, () -> productService.updateProductPrice(anyLong(), BigDecimal.ONE));
         verify(productEntityService).getByIdWithControl(any());
@@ -382,7 +382,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void shouldNotPriceRegulatorWhenCategoryIdNotExist() {
+    void shouldNotPriceRegulatorWhenCategoryIdDoesNotExist() {
         doThrow(new InvalidParameterExceptions(GeneralErrorMessage.INVALID_REQUEST)).when(categoryEntityService).getByIdWithControl(anyLong());
         InvalidParameterExceptions result = assertThrows(InvalidParameterExceptions.class, () -> productService.priceRegulator(anyLong()));
         verify(categoryEntityService).getByIdWithControl(any());

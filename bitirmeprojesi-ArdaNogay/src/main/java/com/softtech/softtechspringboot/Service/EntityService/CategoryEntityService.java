@@ -1,8 +1,8 @@
 package com.softtech.softtechspringboot.Service.EntityService;
 
-import com.softtech.softtechspringboot.Entity.Category;
+import com.softtech.softtechspringboot.entity.Category;
 import com.softtech.softtechspringboot.Enum.CategoryType;
-import com.softtech.softtechspringboot.Repository.CategoryDao;
+import com.softtech.softtechspringboot.repository.CategoryDao;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +15,7 @@ public class CategoryEntityService extends BaseEntityService<Category ,CategoryD
     }
 
     public Category findByCategoryType(CategoryType type){
-        return getDao().findByCategoryType(type);
+        return getDao().findCategoryByCategoryType(type);
     }
 
 }

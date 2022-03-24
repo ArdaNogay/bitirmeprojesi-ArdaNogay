@@ -1,7 +1,7 @@
 package com.softtech.softtechspringboot.Security.Service;
 
 import com.softtech.softtechspringboot.Dto.UserSaveAndUpdateRequestDto;
-import com.softtech.softtechspringboot.Entity.User;
+import com.softtech.softtechspringboot.entity.User;
 import com.softtech.softtechspringboot.Security.Dto.LoginRequestDto;
 import com.softtech.softtechspringboot.Security.Enum.EnumJwtConstant;
 import com.softtech.softtechspringboot.Security.Jwt.JwtUtils;

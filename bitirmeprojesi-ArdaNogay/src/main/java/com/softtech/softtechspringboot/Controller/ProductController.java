@@ -38,7 +38,7 @@ public class ProductController {
     }
 
     @Operation(tags = "Product Controller")
-    @GetMapping("/by/filtered/price")
+    @GetMapping("/between")
     public ResponseEntity filterByPrice(@RequestParam("min") BigDecimal smallPrice, @RequestParam("max") BigDecimal bigPrice){
         List<ProductSaveAndUpdateResponseDto> responseDtoList = productService.findProductsByLastPriceWithTaxBetween(smallPrice, bigPrice);
         return ResponseEntity.ok(GeneralResponse.of(responseDtoList));
@@ -69,8 +69,8 @@ public class ProductController {
 
     @Operation(tags = "Product Controller")
     @Validated
-    @PatchMapping("/by/products/{id}/")
-    public ResponseEntity priceUpdate(@PathVariable("id")Long id ,@RequestParam("Tax Free Price") BigDecimal taxFreePrice){
+    @PatchMapping("/{id}")
+    public ResponseEntity updatePrice(@PathVariable("id")Long id , @RequestParam("tax-free-price") BigDecimal taxFreePrice){
         ProductSaveAndUpdateResponseDto updateResponseDto = productService.updateProductPrice(id,taxFreePrice);
         return ResponseEntity.ok(GeneralResponse.of(updateResponseDto));
     }
