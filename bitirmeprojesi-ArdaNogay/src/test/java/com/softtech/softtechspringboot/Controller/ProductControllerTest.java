@@ -211,7 +211,7 @@ class ProductControllerTest extends BaseTest {
     }
 
     @Test
-    void shouldNotUpdatePriceWhenTaxFreePrıceLessThanZero() throws Exception {//Todo: Buradayız!!!!!!!!!!
+    void shouldNotUpdatePriceWhenTaxFreePrıceLessThanZero() throws Exception {
         MvcResult result = mockMvc.perform(
                 patch(BASE_PATH + "/4?tax-free-price=-4").content("").contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isBadRequest()).andReturn();
@@ -222,7 +222,7 @@ class ProductControllerTest extends BaseTest {
     }
 
     @Test
-    void shouldNotUpdatePriceWhenProductIdDoesNotExist() throws Exception {//Todo: Buradayız!!!!!!!!!!
+    void shouldNotUpdatePriceWhenProductIdDoesNotExist() throws Exception {
         MvcResult result = mockMvc.perform(
                 patch(BASE_PATH + "/4?tax-free-price=4").content("").contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isNotFound()).andReturn();
