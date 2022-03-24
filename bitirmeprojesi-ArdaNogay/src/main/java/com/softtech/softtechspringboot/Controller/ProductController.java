@@ -7,14 +7,12 @@ import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateRequestDto;
 import com.softtech.softtechspringboot.Dto.ProductSaveAndUpdateResponseDto;
 import com.softtech.softtechspringboot.Service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 @RestController

@@ -51,8 +51,8 @@ public class UserService {
     }
 
     private void isUserNameExist(UserSaveAndUpdateRequestDto userSaveAndUpdateRequestDto) {
-        String userName = userEntityService.findByUserName(userSaveAndUpdateRequestDto.getUserName());
-        if (userName != null) {
+        User user = userEntityService.getUserByUserName(userSaveAndUpdateRequestDto.getUserName());
+        if (user != null) {
             throw new DoesNotExistExceptions(UserErrorMessage.HAS_DUPLICATE_USER_USERNAME);
         }
     }
@@ -70,7 +70,7 @@ public class UserService {
     private void userNameConflictControl(Long id, UserSaveAndUpdateRequestDto userSaveAndUpdateRequestDto) {
         User userToCheck = userEntityService.getUserByUserName(userSaveAndUpdateRequestDto.getUserName());
         User user = userEntityService.getByIdWithControl(id);
-        if (user.getId() != userToCheck.getId()) {
+        if (user.getId() != userToCheck.getId() || userToCheck!=null ) {
             throw new DuplicateEntityExceptions(UserErrorMessage.HAS_DUPLICATE_USER_USERNAME);
         }
     }

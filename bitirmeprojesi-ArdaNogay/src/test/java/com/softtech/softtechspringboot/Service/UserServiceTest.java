@@ -57,9 +57,10 @@ class UserServiceTest {
     @Test
     void shouldNotSaveWhenUserNameIsExist() {
         UserSaveAndUpdateRequestDto requestDto = mock(UserSaveAndUpdateRequestDto.class);
+        User user = mock(User.class);
 
         when(requestDto.getUserName()).thenReturn("userName");
-        when(userEntityService.findByUserName(requestDto.getUserName())).thenReturn("userName");
+        when(userEntityService.getUserByUserName(requestDto.getUserName())).thenReturn(user);
 
         assertThrows(DoesNotExistExceptions.class, () -> userService.save(requestDto));
     }

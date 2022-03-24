@@ -2,6 +2,7 @@ package com.softtech.softtechspringboot.Controller;
 
 import com.softtech.softtechspringboot.Dto.*;
 import com.softtech.softtechspringboot.Service.CategoryService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -19,6 +20,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
+    @Operation(tags = "Category Controller")
     @Validated
     @PostMapping
     public ResponseEntity save(@RequestBody @Valid CategorySaveAndUpdateRequestDto categorySaveAndUpdateRequestDto){
@@ -32,6 +34,7 @@ public class CategoryController {
         return ResponseEntity.ok(GeneralResponse.of(mappingJacksonValue));
     }
 
+    @Operation(tags = "Category Controller")
     @Validated
     @PutMapping
     public ResponseEntity update(@RequestBody @Valid CategorySaveAndUpdateRequestDto categorySaveAndUpdateRequestDto){
@@ -39,6 +42,7 @@ public class CategoryController {
         return ResponseEntity.ok(GeneralResponse.of(updateRequestDto));
     }
 
+    @Operation(tags = "Category Controller")
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id){
         categoryService.delete(id);

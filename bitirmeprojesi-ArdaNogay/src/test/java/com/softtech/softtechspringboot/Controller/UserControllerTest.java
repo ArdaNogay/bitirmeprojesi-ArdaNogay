@@ -72,7 +72,43 @@ class UserControllerTest extends BaseTest {
     }
 
     @Test
-    void update() {
+    void shouldNotSaveWhenUserNameExist() throws Exception {
+        UserSaveAndUpdateRequestDto userSaveAndUpdateRequestDto = UserSaveAndUpdateRequestDto.builder()
+                .name("aadmin")
+                .surname("ürün")
+                .userName("admin")
+                .password("1235")
+                .build();
+
+        String content = objectMapper.writeValueAsString(userSaveAndUpdateRequestDto);
+
+        MvcResult result = mockMvc.perform(
+                post(BASE_PATH).content(content).contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isNotAcceptable()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertFalse(isSuccess);
+    }
+
+    @Test
+    void update() throws Exception {
+        UserSaveAndUpdateRequestDto userSaveAndUpdateRequestDto = UserSaveAndUpdateRequestDto.builder()
+                .name("Test")
+                .surname("try")
+                .userName("admining")
+                .password("1235")
+                .build();
+
+        String content = objectMapper.writeValueAsString(userSaveAndUpdateRequestDto);
+
+        MvcResult result = mockMvc.perform(
+                put(BASE_PATH + "/10").content(content).contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertTrue(isSuccess);
     }
 
     @Test
@@ -86,5 +122,17 @@ class UserControllerTest extends BaseTest {
 
         assertTrue(isSuccess);
 
+    }
+
+    @Test
+    void shouldNoDeleteWhenIdDoesNotExist() throws Exception {
+
+        MvcResult result = mockMvc.perform(
+                delete(BASE_PATH + "/9999").content("9999").contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isNotFound()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertFalse(isSuccess);
     }
 }

@@ -53,15 +53,59 @@ class ProductControllerTest extends BaseTest {
     }
 
     @Test
-    void findProductsByCategoryId() {
+    void findProductsByCategoryId() throws Exception {
+        MvcResult result = mockMvc.perform(
+                get(BASE_PATH + "/1").content("1L").contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertTrue(isSuccess);
     }
 
     @Test
-    void filterByPrice() {
+    void shouldNotFindProductsWhenCategoryIdNotExist() throws Exception {
+        MvcResult result = mockMvc.perform(
+                get(BASE_PATH + "/1999").content("1999L").contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isNotFound()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertFalse(isSuccess);
     }
 
     @Test
-    void getProductCategoryDetails() {
+    void filterByPrice() throws Exception {
+        MvcResult result = mockMvc.perform(
+                get(BASE_PATH + "/by/filtered/price?min=20&max=1000").content("").contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertTrue(isSuccess);
+    }
+
+    @Test
+    void shouldNotFilterByPriceWhenInputsInvalid() throws Exception {
+        MvcResult result = mockMvc.perform(
+                get(BASE_PATH + "/by/filtered/price?min=100&max=10").content("").contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isBadRequest()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertFalse(isSuccess);
+    }
+
+    @Test
+    void getProductCategoryDetails() throws Exception {
+
+        MvcResult result = mockMvc.perform(
+                get(BASE_PATH + "/details").content("").contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertTrue(isSuccess);
     }
 
     @Test
@@ -84,6 +128,21 @@ class ProductControllerTest extends BaseTest {
     }
 
     @Test
+    void shouldNotSaveWhenParametersAreNull() throws Exception {
+        ProductSaveAndUpdateRequestDto productSaveAndUpdateRequestDto = ProductSaveAndUpdateRequestDto.builder().build();
+
+        String content = objectMapper.writeValueAsString(productSaveAndUpdateRequestDto);
+
+        MvcResult result = mockMvc.perform(
+                post(BASE_PATH).content(content).contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isBadRequest()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertFalse(isSuccess);
+    }
+
+    @Test
     void update() {
     }
 
@@ -102,5 +161,17 @@ class ProductControllerTest extends BaseTest {
 
         assertTrue(isSuccess);
 
+    }
+
+    @Test
+    void shouldNoDeleteWhenIdDoesNotExist() throws Exception {
+
+        MvcResult result = mockMvc.perform(
+                delete(BASE_PATH + "/9999").content("9999").contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isNotFound()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertFalse(isSuccess);
     }
 }

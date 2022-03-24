@@ -60,7 +60,56 @@ class CategoryControllerTest extends BaseTest {
     }
 
     @Test
-    void update() {
+    void update() throws Exception {
+        CategorySaveAndUpdateRequestDto categorySaveAndUpdateRequestDto = CategorySaveAndUpdateRequestDto.builder()
+                .categoryType(CategoryType.OTHER)
+                .tax(BigDecimal.valueOf(15))
+                .build();
+
+        String content = objectMapper.writeValueAsString(categorySaveAndUpdateRequestDto);
+
+        MvcResult result = mockMvc.perform(
+                put(BASE_PATH).content(content).contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertTrue(isSuccess);
+    }
+    @Test
+    void shouldNotUpdateWhenTaxIsBellowZero() throws Exception {
+        CategorySaveAndUpdateRequestDto categorySaveAndUpdateRequestDto = CategorySaveAndUpdateRequestDto.builder()
+                .categoryType(CategoryType.OTHER)
+                .tax(BigDecimal.valueOf(-15))
+                .build();
+
+        String content = objectMapper.writeValueAsString(categorySaveAndUpdateRequestDto);
+
+        MvcResult result = mockMvc.perform(
+                put(BASE_PATH).content(content).contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isBadRequest()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertFalse(isSuccess);
+    }
+
+    @Test
+    void shouldNotUpdateWhenCategoryTypeDoesNotExist() throws Exception {
+        CategorySaveAndUpdateRequestDto categorySaveAndUpdateRequestDto = CategorySaveAndUpdateRequestDto.builder()
+                .categoryType(null)
+                .tax(BigDecimal.valueOf(15))
+                .build();
+
+        String content = objectMapper.writeValueAsString(categorySaveAndUpdateRequestDto);
+
+        MvcResult result = mockMvc.perform(
+                put(BASE_PATH).content(content).contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isNotFound()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertFalse(isSuccess);
     }
 
     @Test
@@ -74,5 +123,17 @@ class CategoryControllerTest extends BaseTest {
 
         assertTrue(isSuccess);
 
+    }
+
+    @Test
+    void shouldNoDeleteWhenIdDoesNotExist() throws Exception {
+
+        MvcResult result = mockMvc.perform(
+                delete(BASE_PATH + "/9999").content("9999").contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isNotFound()).andReturn();
+
+        boolean isSuccess = isSuccess(result);
+
+        assertFalse(isSuccess);
     }
 }
