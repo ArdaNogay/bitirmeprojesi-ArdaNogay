@@ -56,7 +56,7 @@ Before you run and use this project, please read the readme file and main story 
 3. Import the project to your IDE.
 4. Find the pom.xml file in the project files and select it to proceed.
 This step will make the necessary project settings for you.
-  ![ide](https://user-images.githubusercontent.com/83350108/160040353-e6dc47f8-9020-47f1-ba3d-2047e0d6aef5.PNG)
+![ide](https://user-images.githubusercontent.com/83350108/160042982-ceffe9f4-0c94-47bc-94dc-35a257ca01f5.PNG)
 5. Create a new database by using PgAdmin on PostgreSQL.
 6. If you want, you can run the project on IDE too by applying required configurations. 
 7. Open the swagger ui on your browser. Default link -> http://localhost:8080/swagger-ui.html
