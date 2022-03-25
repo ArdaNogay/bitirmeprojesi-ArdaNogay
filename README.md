@@ -38,6 +38,11 @@
 * [Lombok](https://projectlombok.org)
 * [Hateoas](https://en.wikipedia.org/wiki/HATEOAS)
 
+About the project file;
+
+![Spring   Config](https://user-images.githubusercontent.com/83350108/160043332-0da3a166-0d6c-4652-a208-04054527dcf3.PNG)
+
+
 ### Short Description
 Project Subject: Writing the service that determines the final prices of the products in a market according to the sales prices, using the Spring Boot Framework and optionally writing the frontend.
 Before you run and use this project, please read the readme file and main story by clicking below links.
