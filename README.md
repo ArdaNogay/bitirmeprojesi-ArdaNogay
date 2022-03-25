@@ -1,49 +1,100 @@
-# Bitirme Projesi
+# Service that determines final prices
 
-Projenin Konusu:
-Bir marketteki ürünlerin satış fiyatlarına göre son fiyatlarını belirleyen servisin Spring Boot Framework
-kullanılarak yazılması ve isteğe bağlı olarak önyüzünün yazılması.
+<!-- TABLE OF CONTENTS -->
+<details><summary>CONTENT</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+        <li><a href="#short-description">Short Description</a></li>
+        <li><a href="#main-story">Main Story</a></li>
+        <li><a href="#extended-story">Extended Story</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#screenshots">Screenshots</a></li>
+      </ul>
+    </li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+</details>
 
-> **Gereksinimler:**
+<!-- ABOUT THE PROJECT -->
+## About The Project
+### Built With
+* [Jason Web Token](https://jwt.io/)
+* [Java 11](https://www.oracle.com/tr/java/technologies/javase/jdk11-archive-downloads.html)
+* [IntelliJ Idea](https://www.jetbrains.com/idea)
+* [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
+* [Validation](https://spring.io/guides/gs/validating-form-input)
+* [Developer Tools](https://docs.spring.io/spring-boot/docs/1.5.16.RELEASE/reference/html/using-boot-devtools.html)
+* [Postgre SQL](https://www.postgresql.org/)
+* [Open API](https://springdoc.org)
+* [Lombok](https://projectlombok.org)
+* [Hateoas](https://en.wikipedia.org/wiki/HATEOAS)
 
-> **Backend:**
+### Short Description
+Project Subject: Writing the service that determines the final prices of the products in a market according to the sales prices, using the Spring Boot Framework and optionally writing the frontend.
+Before you run and use this project, please read the readme file and main story by clicking below links.
 
-- Kullanıcıdan kullanıcı adı, şifre, isim, soy isim bilgilerini alarak sisteme kayıt yapılır.
-- Sisteme kayıtlı kullanıcılar market ürünlerinin veri girişini yapabilir.
-- Ürün türlerine göre KDV oranları değişiklik göstermektedir. Bu oranlar aşağıdaki tabloda
-belirtilmiştir. __**Zaman zaman KDV oranları değişiklik gösterebilmektedir.**__
+### Main Story
+<a href="https://github.com/165-Softtech-Patika-Java-Spring/bitirmeprojesi-ArdaNogay/blob/main/bitirme.pdf" target="_blank">Click me to read main story.</a>
 
-![Image](https://www.linkpicture.com/q/Untitled_395.png)
+<!-- GETTING STARTED -->
+## Getting Started
+### Installation
+1. Clone the repo
+   ```sh
+      git clone https://github.com/165-Softtech-Patika-Java-Spring/bitirmeprojesi-ArdaNogay.git
+   ```
+2. Install JDK-11 and switch to it.
+3. Import the project to your IDE.
+4. Find the pom.xml file in the project files and select it to proceed.
+This step will make the necessary project settings for you.
+  ![ide](https://user-images.githubusercontent.com/83350108/160040353-e6dc47f8-9020-47f1-ba3d-2047e0d6aef5.PNG)
+5. Create a new database by using PgAdmin on PostgreSQL.
+6. If you want, you can run the project on IDE too by applying required configurations. 
+7. Open the swagger ui on your browser. Default link -> http://localhost:8080/swagger-ui.html
+8. Send request to endpoints (The project is running on the 8080 port by defalt).
 
+### Screenshots
+---
+![register](https://user-images.githubusercontent.com/83350108/160039926-3acce8cc-d4ae-4de5-943b-df1fb2cf5731.PNG)
+- In order to use the services, you must first register with the system.
+</br>
 
-- Ürün için veri girişi yapacak kullanıcı; ürünün adı, ürünün türü ve vergisiz satış fiyatı alanlarını
-doldurur. Her bir ürün için KDV Tutarı ve ürünün son fiyatı da hesaplanarak sisteme kaydedilir.
-> **Kurallar ve gereksinimler:**
-- Sisteme yeni kullanıcı tanımlanabilir, güncellenebilir ve silinebilir.
-- Sisteme yeni ürünler tanımlanabilir, güncellenebilir ve silinebilir.
-- Ürünlerin fiyatları güncellenebilir.
-- KDV oranları değiştiğinde sistemdeki ürünlere de bu değişiklik yansıtılmalıdır. Herhangi bir hata
-durumunda tüm işlemler geri alınmalıdır.
-- Tüm ürünler listelenebilmelidir.
-- Ürün türlerine göre ürünler listelenebilmelidir.
-- Belirli bir fiyat aralığındaki ürünler listelenebilmelidir.
-- Ürün türlerine göre aşağıdaki gibi detay veri içeren bir bilgilendirme alınabilmelidir.
+![login1](https://user-images.githubusercontent.com/83350108/160040716-0ebaff60-3daa-48af-95e1-760cde3cdcb3.PNG)
+- Login to the system with the user you created.
+</br>
 
-![Image](https://www.linkpicture.com/q/22_57.png)
+![getyourtokenwithoutbearer](https://user-images.githubusercontent.com/83350108/160040863-eaa52abd-2965-4f0a-96b5-1161994cccc3.PNG)
+- After logging into the system, do not forget to get tokens from the reply you receive in order to be able to use the service.
+- ##### WARNING! When purchasing your token, you must buy it without the "Bearer" prefix.
+</br>
 
-> Validasyonlar:
-- Aynı kullanıcı adı ile kullanıcı tanımı yapılamaz.
-- Kullanıcı girişi kullanıcı adı & şifre kombinasyonu ile yapılır.
-- Ürün türü, fiyatı, adı gibi alanlar boş olamaz.
-- Ürün fiyatı sıfır ya da negatif olamaz.
-- KDV oranı negatif olamaz.
-> Authentication:
-- Güvenli endpointler kullanınız. (jwt, bearer vs. )
-> Response:
-- Başarılı ve başarısız responselar için modeller tanımlayın ve bunları kullanın.
-> Dökümantasyon:
-- Open API Specification (Swagger tercih sebebi)
-> Exception Handling:
-- Hatalı işlemler için doğru hata kodlarının dönüldüğünden emin olunuz.
-> Test:
-- Unit ve integration testleri yazınız. 
+![auth](https://user-images.githubusercontent.com/83350108/160041436-4e67494c-ee72-4d23-9f83-57b234ace9e9.PNG)
+- Click the "Authorize" button on the top right of the Swagger page.
+</br>
+
+![auth Authorize](https://user-images.githubusercontent.com/83350108/160041467-2a77f1d5-a49b-4b7e-99f6-f3ae0ed686f4.PNG)
+- In the window that opens, enter the token given to you and verify your permission for service uses.
+
+![unlocked](https://user-images.githubusercontent.com/83350108/160041926-3e52c4cf-79ce-4b87-8029-31a9d6c8c92f.jpg)
+You now have the necessary permission to use all services. All services are waiting for you to use.
+
+<!-- CONTRIBUTING -->
+## Contributing
+Any contributions you make are **greatly appreciated**.
+
+If you have a suggestion that would make this better, please fork the repo and create a pull request.
+
+<!-- CONTACT -->
+## Contact
+Ceyhan Arda Nogay: https://www.linkedin.com/in/ardanogay
+
+Project Link: https://github.com/165-Softtech-Patika-Java-Spring/bitirmeprojesi-ArdaNogay
