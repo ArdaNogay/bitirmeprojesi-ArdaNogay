@@ -3,6 +3,7 @@ package com.softtech.softtechspringboot.Controller;
 import com.softtech.softtechspringboot.Dto.*;
 import com.softtech.softtechspringboot.Service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,8 +26,8 @@ public class CategoryController {
 
     @Operation(
             tags = "Category Controller",
-            description = "Saves a new category according to the information filled",
-            summary = "Saves new category",
+            description = "Saves a new category according to the information filled.",
+            summary = "Saves a new category",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Categories",
                     content = {
@@ -37,12 +38,21 @@ public class CategoryController {
                                     ),
                                     examples = {
                                             @ExampleObject(
-                                                    name = "save a category",
-                                                    summary = "New Category Example",
+                                                    name = "save a category 1",
+                                                    summary = "New Category Example 1",
                                                     description = "Saves new category based on filled information",
                                                     value = "{\n" +
-                                                            "  \"CategoryType\": \"FOOD\",\n" +
-                                                            "  \"Tax %...\": \"smith\",\n" +
+                                                            "  \"categoryType\": \"FOOD\",\n" +
+                                                            "  \"tax\": 18\n" +
+                                                            "}"
+                                            ),
+                                            @ExampleObject(
+                                                    name = "save a category 2",
+                                                    summary = "New Category Example 2",
+                                                    description = "Saves new category based on filled information",
+                                                    value = "{\n" +
+                                                            "  \"categoryType\": \"TECHNOLOGY\",\n" +
+                                                            "  \"tax\": 10\n" +
                                                             "}"
                                             )
                                     }
@@ -63,7 +73,33 @@ public class CategoryController {
         return ResponseEntity.ok(GeneralResponse.of(mappingJacksonValue));
     }
 
-    @Operation(tags = "Category Controller")
+    @Operation(
+            tags = "Category Controller",
+            description = "Updates a registered category based on the information filled in.",
+            summary = "Updates a registered category",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Categories",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(
+                                            implementation = CategorySaveAndUpdateRequestDto.class
+                                    ),
+                                    examples = {
+                                            @ExampleObject(
+                                                    name = "update a category",
+                                                    summary = "Category Example",
+                                                    description = "Updates new category based on filled information",
+                                                    value = "{\n" +
+                                                            "  \"categoryType\": \"STATIONARY\",\n" +
+                                                            "  \"tax\": 8\n" +
+                                                            "}"
+                                            )
+                                    }
+                            )
+                    }
+            )
+    )
     @Validated
     @PutMapping
     public ResponseEntity update(@RequestBody @Valid CategorySaveAndUpdateRequestDto categorySaveAndUpdateRequestDto){
@@ -71,9 +107,13 @@ public class CategoryController {
         return ResponseEntity.ok(GeneralResponse.of(updateRequestDto));
     }
 
-    @Operation(tags = "Category Controller")
+    @Operation(
+            tags = "Category Controller",
+            description = "Deletes a registered category based on the filled Id",
+            summary = "Deletes a registered category"
+    )
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable("id") Long id){
+    public ResponseEntity delete(@Parameter(required = true, description = "There must be a category with an ID to fill")@PathVariable("id") Long id){
         categoryService.delete(id);
         return ResponseEntity.ok(GeneralResponse.empty());
     }
