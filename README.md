@@ -43,7 +43,7 @@ About the project file;
 
 
 ### Short Description
-Project Subject: Writing the service that determines the final prices of the products in a market according to the sales prices, using the Spring Boot Framework and optionally writing the frontend.
+Project Subject: Writing the service that determines the final prices of the products in a market according to the sales prices, using the Spring Boot Framework.
 Before you run and use this project, please read the readme file and main story by clicking below links.
 
 ### Main Story
@@ -67,7 +67,7 @@ This step will make the necessary project settings for you.
 6. If you want, you can run the project on IDE too by applying required configurations. 
 7. Open the swagger ui on your browser. Default link -> http://localhost:8080/swagger-ui.html
 8. Send request to endpoints (The project is running on the 8080 port by defalt).
-9. Eğer kategori tablosunu hızlıca doldurmak istiyorsanız, iligi linke tıklayarak Veri tabanı scriptine erişebilir ve bu komutları veri tabanında çalıştırabilirsiniz. ->https://github.com/165-Softtech-Patika-Java-Spring/bitirmeprojesi-ArdaNogay/blob/main/scripts/import_category.sql
+9. If you want to fill the category table quickly, you can access the database script by clicking the link below and run these commands in the database. ->https://github.com/165-Softtech-Patika-Java-Spring/bitirmeprojesi-ArdaNogay/blob/main/scripts/import_category.sql
 ![table](https://user-images.githubusercontent.com/83350108/160044358-a978490e-ce17-419e-932a-11f6d2ad3501.png)
 10. Thus, the table in the image will quickly fill up for you.
 
