@@ -9,7 +9,6 @@
         <li><a href="#built-with">Built With</a></li>
         <li><a href="#short-description">Short Description</a></li>
         <li><a href="#main-story">Main Story</a></li>
-        <li><a href="#extended-story">Extended Story</a></li>
       </ul>
     </li>
     <li>
