@@ -71,6 +71,7 @@ This step will make the necessary project settings for you.
 10.
  
 ![table](https://user-images.githubusercontent.com/83350108/160044358-a978490e-ce17-419e-932a-11f6d2ad3501.png)
+
 11. Thus, the table in the image will quickly fill up for you.
 
 ### Screenshots
