@@ -68,7 +68,8 @@ This step will make the necessary project settings for you.
 7. Open the swagger ui on your browser. Default link -> http://localhost:8080/swagger-ui.html
 8. Send request to endpoints (The project is running on the 8080 port by defalt).
 9. If you want to fill the category table quickly, you can access the database script by clicking the link below and run these commands in the database. ->https://github.com/165-Softtech-Patika-Java-Spring/bitirmeprojesi-ArdaNogay/blob/main/scripts/import_category.sql
-10. 
+10.
+ 
 ![table](https://user-images.githubusercontent.com/83350108/160044358-a978490e-ce17-419e-932a-11f6d2ad3501.png)
 11. Thus, the table in the image will quickly fill up for you.
 
